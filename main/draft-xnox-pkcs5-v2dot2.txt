@@ -2,7 +2,7 @@
 
 
 
-WG Working Group                                            D. J. Ledkov
+Network Working Group                                       D. J. Ledkov
 Internet-Draft                                          Chainguard, Inc.
 Intended status: Informational                               15 May 2025
 Expires: 16 November 2025
@@ -20,16 +20,12 @@ About This Document
    This note is to be removed before publishing as an RFC.
 
    The latest revision of this draft can be found at
-   https://example.com/LATEST.  Status information for this document may
-   be found at https://datatracker.ietf.org/doc/draft-xnox-
-   pkcs5-v2dot2/.
-
-   Discussion of this document takes place on the WG Working Group
-   mailing list (mailto:WG@example.com), which is archived at
-   https://example.com/WG.
+   https://xnox.github.io/draft-xnox-pkcs5-v2dot2/draft-xnox-
+   pkcs5-v2dot2.html.  Status information for this document may be found
+   at https://datatracker.ietf.org/doc/draft-xnox-pkcs5-v2dot2/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/USER/REPO.
+   https://github.com/xnox/draft-xnox-pkcs5-v2dot2.
 
 Status of This Memo
 
