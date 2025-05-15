@@ -11,9 +11,8 @@ v: 3
 # area: AREA
 # workgroup: WG Working Group
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+ - pkcs5
+ - pbkdf2
 venue:
 #  group: WG
 #  type: Working Group
