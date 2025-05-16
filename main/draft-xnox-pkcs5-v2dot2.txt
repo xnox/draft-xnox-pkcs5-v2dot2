@@ -4,8 +4,8 @@
 
 Network Working Group                                       D. J. Ledkov
 Internet-Draft                                          Chainguard, Inc.
-Intended status: Informational                               15 May 2025
-Expires: 16 November 2025
+Intended status: Informational                               16 May 2025
+Expires: 17 November 2025
 
 
      PKCS #5: Password-Based Cryptography Specification Version 2.2
@@ -13,7 +13,16 @@ Expires: 16 November 2025
 
 Abstract
 
-   TODO Abstract
+   This document provides recommendations for the implementation of
+   password-based cryptography, covering key derivation functions,
+   encryption schemes, message authentication schemes, and ASN.1 syntax
+   identifying the techniques.
+
+   It is based on the RFC 8018, the IETF republication of PKCS #5 v2.1
+   from RSA Laboratories' Public-Key Cryptography Standards (PKCS)
+   series.
+
+   This document obsoletes RFC 8018.
 
 About This Document
 
@@ -42,7 +51,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 November 2025.
+   This Internet-Draft will expire on 17 November 2025.
 
 Copyright Notice
 
@@ -62,15 +71,51 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  Security Considerations
-   4.  IANA Considerations
-   5.  Normative References
+   3.  Notation
+   4.  Overview
+   5.  Salt and Iteration Count
+     5.1.  Salt
+   6.  Security Considerations
+   7.  IANA Considerations
+   8.  References
+     8.1.  Normative References
+     8.2.  Informative References
    Acknowledgments
    Author's Address
 
 1.  Introduction
 
-   TODO Introduction
+   This document provides recommendations for the implementation of
+   password-based cryptography, covering the following aspects:
+
+   *  key derivation functions
+
+   *  encryption schemes
+
+   *  message authentication schemes
+
+   *  ASN.1 syntax identifying the techniques
+
+   The recommendations are intended for general application within
+   computer and communications systems and, as such, include a fair
+   amount of flexibility.  They are particularly intended for the
+   protection of sensitive information such as private keys as in PKCS
+   #8 [RFC5208] [RFC5958].  It is expected that application standards
+   and implementation profiles based on these specifications may include
+   additional constraints.
+
+   Other cryptographic techniques based on passwords, such as password-
+   based key entity authentication and key establishment protocols
+   [BELLOV] [JABLON] [WU] are outside the scope of this document.
+   Memory-hard key derivation and proof-of-work schemes are also outside
+   the scope of this document.
+
+   Guidelines for the selection of passwords are also outside the scope.
+   This document supersedes PKCS #5 version 2.1 [RFC8018] and removes
+   techniques previouslly obsoleted.
+
+   This document represents evolution of PKCS #5 v2.1 [PKCS5_21] from
+   RSA Laboratories' Public-Key Cryptography Standards (PKCS) series.
 
 2.  Conventions and Definitions
 
@@ -80,24 +125,271 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  Security Considerations
+3.  Notation
+
+    C       ciphertext, an octet string
+
+    c       iteration count, a positive integer
+
+    DK      derived key, an octet string
+
+    dkLen   length in octets of derived key, a positive integer
+
+    EM      encoded message, an octet string
+
+    Hash    underlying hash function
+
+    hLen    length in octets of pseudorandom function output, a positive
+            integer
+
+    l       length in blocks of derived key, a positive integer
+
+    IV      initialization vector, an octet string
+
+    K       encryption key, an octet string
+
+    KDF     key derivation function
+
+    M       message, an octet string
+
+    P       password, an octet string
+
+    PRF     underlying pseudorandom function
+
+    PS      padding string, an octet string
+
+    psLen   length in octets of padding string, a positive integer
+
+    S       salt, an octet string
+
+    T       message authentication code, an octet string
+
+    T_1, ..., T_l, U_1, ..., U_c
+            intermediate values, octet strings
+
+    01, 02, ..., 08
+            octets with value 1, 2, ..., 8
+
+    \xor    bit-wise exclusive-or of two octet strings
+
+    ||  ||  octet length operator
+
+    ||      concatenation operator
+
+    i..j  substring extraction operator: extracts octets i through j,
+            0 <= i <= j
+
+4.  Overview
+
+   In many applications of public-key cryptography, user security is
+   ultimately dependent on one or more secret text values or passwords.
+   Since a password is not directly applicable as a key to any
+   conventional cryptosystem, however, some processing of the password
+   is required to perform cryptographic operations with it.  Moreover,
+   as passwords are often chosen from a relatively small space, special
+   care is required in that processing to defend against search attacks.
+
+   A general approach to password-based cryptography, as described by
+   Morris and Thompson [MORRIS] for the protection of password tables,
+   is to combine a password with a salt to produce a key.  The salt can
+   be viewed as an index into a large set of keys derived from the
+   password and need not be kept secret.  Although it may be possible
+   for an opponent to construct a table of possible passwords (a so-
+   called "dictionary attack"), constructing a table of possible keys
+   will be difficult, since there will be many possible keys for each
+   password.  An opponent will thus be limited to searching through
+   passwords separately for each salt.
+
+   Another approach to password-based cryptography is to construct key
+   derivation techniques that are relatively expensive, thereby
+   increasing the cost of exhaustive search.  One way to do this is to
+   include an iteration count in the key derivation technique,
+   indicating how many times to iterate some underlying function by
+   which keys are derived.  A modest number of iterations (say, 1000) is
+   not likely to be a burden for legitimate parties when computing a
+   key, but will be a significant burden for opponents.
+
+   Salt and iteration count formed the basis for password-based
+   encryption in PKCS #5 v2.0, and are adopted here as well for the
+   various cryptographic operations.  Thus, password-based key
+   derivation as defined here is a function of a password, a salt, and
+   an iteration count, where the latter two quantities need not be kept
+   secret.
+
+   From a password-based key derivation function, it is straightforward
+   to define password-based encryption and message authentication
+   schemes.  As in PKCS #5 v2.0, the password-based encryption schemes
+   here are based on an underlying, conventional encryption scheme,
+   where the key for the conventional scheme is derived from the
+   password.  Similarly, the password-based message authentication
+   scheme is based on an underlying conventional scheme.  This two-
+   layered approach makes the password-based techniques modular in terms
+   of the underlying techniques they can be based on.
+
+   It is expected that the password-based key derivation functions may
+   find other applications than just the encryption and message
+   authentication schemes defined here.  For instance, one might derive
+   a set of keys with a single application of a key derivation function,
+   rather than derive each key with a separate application of the
+   function.  The keys in the set would be obtained as substrings of the
+   output of the key derivation function.  This approach might be
+   employed as part of key establishment in a session-oriented protocol.
+   Another application is password checking, where the output of the key
+   derivation function is stored (along with the salt and iteration
+   count) for the purposes of subsequent verification of a password.
+
+   Throughout this document, a password is considered to be an octet
+   string of arbitrary length whose interpretation as a text string is
+   unspecified.  In the interest of interoperability, however, it is
+   recommended that applications follow some common text encoding rules.
+   ASCII and UTF-8 [RFC3629] are two possibilities.  (ASCII is a subset
+   of UTF-8.)
+
+   Although the selection of passwords is outside the scope of this
+   document, guidelines have been published [NISTSP63] that may well be
+   taken into account.
+
+5.  Salt and Iteration Count
+
+   Inasmuch as salt and iteration count are central to the techniques
+   defined in this document, some further discussion is warranted.
+
+5.1.  Salt
+
+   A salt in password-based cryptography has traditionally served the
+   purpose of producing a large set of keys corresponding to a given
+   password, one of which is selected at random according to the salt.
+   An individual key in the set is selected by applying a key derivation
+   function KDF, as
+
+                          DK = KDF (P, S)
+
+   where DK is the derived key, P is the password, and S is the salt.
+   This has two benefits:
+
+   1.  It is difficult for an opponent to precompute all the keys, or
+       even the most likely keys, corresponding to a dictionary of
+       passwords.  If the salt is 128 bits long, for instance, there
+       will be as many as 2^128 keys for each password.  An opponent is
+       thus limited to searching for passwords after a password- based
+       operation has been performed and the salt is known.
+
+   2.  It is unlikely that the same key will be selected twice.  Again,
+       if the salt is 128 bits long, the chance of "collision" between
+       keys does not become significant until about 2^64 keys have been
+       produced, according to the Birthday Paradox.  The fact that
+       collisions are unlikely addresses some concerns about
+       interactions between multiple uses of the same key that may arise
+       when using some encryption and authentication techniques.
+
+   In password-based encryption, the party encrypting a message can gain
+   assurance that these benefits are realized simply by selecting a
+   large and sufficiently random salt when deriving an encryption key
+   from a password.  A party generating a message authentication code
+   can gain such assurance in a similar fashion.
+
+   The party decrypting a message or verifying a message authentication
+   code, however, cannot be sure that a salt supplied by another party
+   has actually been generated at random.  It is possible, for instance,
+   that the salt may have been copied from another password-based
+   operation in an attempt to exploit interactions between multiple uses
+   of the same key.  For instance, suppose two legitimate parties
+   exchange an encrypted message, where the encryption key is an 160-bit
+   key derived from a shared password with some salt.  An opponent could
+   take the salt from that encryption and provide it to one of the
+   parties as though it were for a 40-bit key.  If the party reveals the
+   result of decryption with the 40-bit key, the opponent may be able to
+   solve for the 40-bit key.  In the case that 40-bit key is the first
+   half of the 80-bit key, the opponent can then readily solve for the
+   remaining 40 bits of the 80-bit key.
+
+   To defend against such attacks, avoid multiple uses of the same key.
+   The salt must not contain data that explicitly distinguishes between
+   different operations.  For example, the salt must not have an
+   additional, non-random octet that specifies whether the derived key
+   is for encryption, for message authentication, or for some other
+   operation.
+
+   Based on this, the following is recommended for salt generation:
+
+   1.  The salt must be generated at random and need not be checked for
+       a particular format by the party receiving the salt.  It should
+       be at least sixteen octets (128 bits) long.
+
+   2.  The salt must not contain any data that explicitly distinguishes
+       between different operations, customization string and different
+       key lengths.
+
+   3.  The encoding of a structure that specifies detailed information
+       about the derived key, such as the encryption or authentication
+       technique, customization string and a sequence number among the
+       different keys derived from the password.  The particular format
+       of the additional data is left to the application.
+
+   If a random number generator or pseudorandom generator is not
+   available, a deterministic alternative for generating the salt must
+   not be made available.
+
+   4.2.  Iteration Count
+
+   An iteration count has traditionally served the purpose of increasing
+   the cost of producing keys from a password, thereby also increasing
+   the difficulty of attack.  Mathematically, an iteration count of c
+   will increase the security strength of a password by log2(c) bits
+   against trial-based attacks like brute force or dictionary attacks.
+
+   Choosing a reasonable value for the iteration count depends on
+   environment and circumstances, and varies from application to
+   application.  Many computing power of general purpose and bespoke
+   hardware, demonstrate significantly increased
+
+   This document follows the recommendations made in FIPS Special
+   Publication 800-132 [NISTSP132], which says
+
+     The iteration count shall be  selected as large as possible, as
+     long as the time required to generate the key using the entered
+     password is acceptable for the users. [...] A minimum iteration
+     count of 1,000 is recommended. For especially critical keys, or
+     for very powerful systems or systems where user-perceived
+     performance is not critical, an iteration count of 10,000,000 may
+     be appropriate.
+
+6.  Security Considerations
 
    TODO Security
 
-4.  IANA Considerations
+7.  IANA Considerations
 
    This document has no IANA actions.
 
-5.  Normative References
+8.  References
+
+8.1.  Normative References
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
+   [RFC5958]  Turner, S., "Asymmetric Key Packages", RFC 5958,
+              DOI 10.17487/RFC5958, August 2010,
+              <https://www.rfc-editor.org/rfc/rfc5958>.
+
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+8.2.  Informative References
+
+   [RFC5208]  Kaliski, B., "Public-Key Cryptography Standards (PKCS) #8:
+              Private-Key Information Syntax Specification Version 1.2",
+              RFC 5208, DOI 10.17487/RFC5208, May 2008,
+              <https://www.rfc-editor.org/rfc/rfc5208>.
+
+   [RFC8018]  Moriarty, K., Ed., Kaliski, B., and A. Rusch, "PKCS #5:
+              Password-Based Cryptography Specification Version 2.1",
+              RFC 8018, DOI 10.17487/RFC8018, January 2017,
+              <https://www.rfc-editor.org/rfc/rfc8018>.
 
 Acknowledgments
 
