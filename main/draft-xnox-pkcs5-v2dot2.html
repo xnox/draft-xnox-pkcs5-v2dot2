@@ -1173,27 +1173,41 @@ identifying the techniques.<a href="#section-abstract-1" class="pilcrow">¶</a><
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
-</li>
-          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-references" class="internal xref">References</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-key-derivation-function" class="internal xref">Key Derivation Function</a></p>
 <ul class="compact toc ulBare ulEmpty">
-<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-pbkdf2" class="internal xref">PBKDF2</a></p>
 </li>
             </ul>
 </li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-encryption-scheme" class="internal xref">Encryption Scheme</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-message-authentication-sche" class="internal xref">Message Authentication Schemes</a></p>
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1376,7 +1390,7 @@ document, guidelines have been published <span>[<a href="#SP800-63b" class="cite
 taken into account.<a href="#section-4-9" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="salt-and-iteration-count">
+<div id="salt-count">
 <section id="section-5">
       <h2 id="name-salt-and-iteration-count">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-salt-and-iteration-count" class="section-name selfRef">Salt and Iteration Count</a>
@@ -1507,31 +1521,171 @@ be used when SHA512 is not available.<a href="#section-5.2-5" class="pilcrow">¶
 </div>
 </section>
 </div>
-<div id="security-considerations">
+<div id="key-derivation-function">
 <section id="section-6">
-      <h2 id="name-security-considerations">
-<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      <h2 id="name-key-derivation-function">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-key-derivation-function" class="section-name selfRef">Key Derivation Function</a>
       </h2>
-<p id="section-6-1">TODO Security<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">A key derivation function produces a derived key from a base key and
+other parameters. In a password-based key derivation function, the
+base key is a password, and the other parameters are a salt value and
+an iteration count, as outlined in <a href="#salt-count" class="auto internal xref">Section 5</a>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">The primary application of the password-based key derivation functions
+defined here is in the encryption schemes in Section 6 and the message
+authentication scheme in Section 7.  Other applications are certainly
+possible, hence the independent definition of these functions.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">A typical application of the key derivation functions defined here
+might include the following steps:<a href="#section-6-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6-4">
+<li id="section-6-4.1">
+          <p id="section-6-4.1.1">Select a salt S and an iteration count c, as outlined in <a href="#salt-count" class="auto internal xref">Section 5</a>.<a href="#section-6-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-6-4.2">
+          <p id="section-6-4.2.1">Select a length in octets for the derived key, dkLen.<a href="#section-6-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-6-4.3">
+          <p id="section-6-4.3.1">Apply the key derivation function to the password, the salt, the iteration count and the key length to produce a derived key.<a href="#section-6-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-6-4.4">
+          <p id="section-6-4.4.1">Output the derived key.<a href="#section-6-4.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ol>
+<p id="section-6-5">Only a single key can be derived. Any number of additional keys may
+not be derived from a password by varying the salt. If additional keys
+are needed use the derived key as input material to HKDF <span>[<a href="#RFC5869" class="cite xref">RFC5869</a>]</span>.<a href="#section-6-5" class="pilcrow">¶</a></p>
+<div id="pbkdf2">
+<section id="section-6.1">
+        <h3 id="name-pbkdf2">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-pbkdf2" class="section-name selfRef">PBKDF2</a>
+        </h3>
+<p id="section-6.1-1">PBKDF2 applies a pseudorandom function (see Appendix B.1 for an
+example) to derive keys.  The length of the derived key is essentially
+unbounded.  (However, the maximum effective search space for the
+derived key may be limited by the structure of the underlying
+pseudorandom function.  See Appendix B.1 for further discussion.)<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1-2">
+<pre>
+   PBKDF2 (P, S, c, dkLen)
+
+   Options:        PRF        underlying pseudorandom function (hLen
+                              denotes the length in octets of the
+                              pseudorandom function output)
+
+   Input:          P          password, an octet string
+                   S          salt, an octet string
+                   c          iteration count, a positive integer
+                   dkLen      intended length in octets of the derived
+                              key, a positive integer, at most
+                              (2^32 - 1) * hLen
+
+   Output:         DK         derived key, a dkLen-octet string
+
+   Steps:
+
+      1.  If dkLen &gt; (2^32 - 1) * hLen, output "derived key too long"
+          and stop.
+
+      2.  Let l be the number of hLen-octet blocks in the derived key,
+          rounding up, and let r be the number of octets in the last
+          block:
+
+                   l = CEIL (dkLen / hLen)
+                   r = dkLen - (l - 1) * hLen
+
+          Here, CEIL (x) is the "ceiling" function, i.e., the smallest
+          integer greater than, or equal to, x.
+
+      3.  For each block of the derived key apply the function F defined
+          below to the password P, the salt S, the iteration count c,
+          and the block index to compute the block:
+
+                   T_1 = F (P, S, c, 1) ,
+                   T_2 = F (P, S, c, 2) ,
+                   ...
+                   T_l = F (P, S, c, l) ,
+
+          where the function F is defined as the exclusive-or sum of the
+          first c iterates of the underlying pseudorandom function PRF
+          applied to the password P and the concatenation of the salt S
+          and the block index i:
+
+                   F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
+
+          where
+                   U_1 = PRF (P, S || INT (i)) ,
+                   U_2 = PRF (P, U_1) ,
+                   ...
+                   U_c = PRF (P, U_{c-1}) .
+
+          Here, INT (i) is a four-octet encoding of the integer i, most
+          significant octet first.
+
+      4.  Concatenate the blocks and extract the first dkLen octets to
+          produce a derived key DK:
+
+                   DK = T_1 || T_2 ||  ...  || T_l&lt;0..r-1&gt;
+
+      5.  Output the derived key DK.
+</pre><a href="#section-6.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-3">Note: The construction of the function F follows a
+"belt-and-suspenders" approach. The iterates U_i are computed
+recursively to remove a degree of parallelism from an opponent; they
+are exclusive-ored together to reduce concerns about the recursion
+degenerating into a small set of values.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="encryption-scheme">
+<section id="section-7">
+      <h2 id="name-encryption-scheme">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-encryption-scheme" class="section-name selfRef">Encryption Scheme</a>
+      </h2>
+<p id="section-7-1">An encryption scheme, in the symmetric setting, consists of an
+   encryption operation and a decryption operation, where the encryption
+   operation produces a ciphertext from a message under a key, and the
+   decryption operation recovers the message from the ciphertext under
+   the same key.  In a password-based encryption scheme, the key is a
+   password.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">A typical application of a password-based encryption scheme is a
+   private-key protection method, where the message contains private-key
+   information, as in PKCS #8.  The encryption schemes defined here
+   would be suitable encryption algorithms in that context.<a href="#section-7-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="message-authentication-schemes">
+<section id="section-8">
+      <h2 id="name-message-authentication-sche">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-message-authentication-sche" class="section-name selfRef">Message Authentication Schemes</a>
+    </h2>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-9">
+      <h2 id="name-security-considerations">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-9-1">TODO Security<a href="#section-9-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-7">
+<section id="section-10">
       <h2 id="name-iana-considerations">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-7-1">This document has no IANA actions.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-10-1">This document has no IANA actions.<a href="#section-10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-combined-references">
-<section id="section-8">
+<section id="section-11">
       <h2 id="name-references">
-<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <div id="sec-normative-references">
-<section id="section-8.1">
+<section id="section-11.1">
         <h3 id="name-normative-references">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="RFC2119">[RFC2119]</dt>
@@ -1550,9 +1704,9 @@ be used when SHA512 is not available.<a href="#section-5.2-5" class="pilcrow">¶
 </section>
 </div>
 <div id="sec-informative-references">
-<section id="section-8.2">
+<section id="section-11.2">
         <h3 id="name-informative-references">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
 <dt id="HASHCAT">[HASHCAT]</dt>
