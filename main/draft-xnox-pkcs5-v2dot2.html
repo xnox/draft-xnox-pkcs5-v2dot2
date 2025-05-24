@@ -11,9 +11,7 @@
 password-based cryptography, covering key derivation functions,
 encryption schemes, message authentication schemes, and ASN.1 syntax
 identifying the techniques. 
-       It is based on the RFC 8018, the IETF republication of PKCS #5 v2.1 from
-RSA Laboratories' Public-Key Cryptography Standards (PKCS) series. 
-       This document obsoletes RFC 8018. 
+       This document obsoletes  . 
     " name="description">
 <meta content="xml2rfc 3.28.1" name="generator">
 <meta content="pkcs5" name="keyword">
@@ -27,7 +25,7 @@ RSA Laboratories' Public-Key Cryptography Standards (PKCS) series.
     intervaltree 3.1.0
     Jinja2 3.1.6
     lxml 5.3.0
-    platformdirs 4.3.7
+    platformdirs 4.3.8
     pycountry 24.6.1
     PyYAML 6.0.2
     requests 2.32.3
@@ -1055,7 +1053,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ledkov</td>
-<td class="center">Expires 17 November 2025</td>
+<td class="center">Expires 25 November 2025</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1066,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-xnox-pkcs5-v2dot2-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-05-16" class="published">16 May 2025</time>
+<time datetime="2025-05-24" class="published">24 May 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-11-17">17 November 2025</time></dd>
+<dd class="expires"><time datetime="2025-11-25">25 November 2025</time></dd>
 <dt class="label-authors">Author:</dt>
 <dd class="authors">
 <div class="author">
@@ -1090,9 +1088,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 password-based cryptography, covering key derivation functions,
 encryption schemes, message authentication schemes, and ASN.1 syntax
 identifying the techniques.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
-<p id="section-abstract-2">It is based on the RFC 8018, the IETF republication of PKCS #5 v2.1 from
-RSA Laboratories' Public-Key Cryptography Standards (PKCS) series.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
-<p id="section-abstract-3">This document obsoletes RFC 8018.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This document obsoletes <span>[<a href="#RFC8018" class="cite xref">RFC8018</a>]</span>.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1124,7 +1120,7 @@ RSA Laboratories' Public-Key Cryptography Standards (PKCS) series.<a href="#sect
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 17 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 25 November 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1170,6 +1166,9 @@ RSA Laboratories' Public-Key Cryptography Standards (PKCS) series.<a href="#sect
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
                 <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-salt" class="internal xref">Salt</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-iteration-count" class="internal xref">Iteration Count</a></p>
 </li>
             </ul>
 </li>
@@ -1221,23 +1220,22 @@ password-based cryptography, covering the following aspects:<a href="#section-1-
           <p id="section-1-2.4.1">ASN.1 syntax identifying the techniques<a href="#section-1-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-1-3">The recommendations are intended for general application within computer
-and communications systems and, as such, include a fair amount of
-flexibility. They are particularly intended for the protection of
-sensitive information such as private keys as in PKCS #8 <span>[<a href="#RFC5208" class="cite xref">RFC5208</a>]</span>
-        <span>[<a href="#RFC5958" class="cite xref">RFC5958</a>]</span>. It is expected that application standards and implementation
-profiles based on these specifications may include additional
-constraints.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">Other cryptographic techniques based on passwords, such as
-password-based key entity authentication and key establishment protocols
-[BELLOV] [JABLON] [WU] are outside the scope of this
-document. Memory-hard key derivation and proof-of-work schemes are also
-outside the scope of this document.<a href="#section-1-4" class="pilcrow">¶</a></p>
-<p id="section-1-5">Guidelines for the selection of passwords are also outside the
-scope. This document supersedes PKCS #5 version 2.1 <span>[<a href="#RFC8018" class="cite xref">RFC8018</a>]</span> and
-removes techniques previouslly obsoleted.<a href="#section-1-5" class="pilcrow">¶</a></p>
-<p id="section-1-6">This document represents evolution of PKCS #5 v2.1 [PKCS5_21] from RSA
-Laboratories' Public-Key Cryptography Standards (PKCS) series.<a href="#section-1-6" class="pilcrow">¶</a></p>
+<p id="section-1-3">The recommendations are intended for general application within computer and
+communications systems and, as such, include a fair amount of flexibility. They
+are particularly intended for the protection of sensitive information such as
+private keys as in CMS <span>[<a href="#RFC5652" class="cite xref">RFC5652</a>]</span> and Asymmetric Key Packages <span>[<a href="#RFC5958" class="cite xref">RFC5958</a>]</span>. It
+is expected that application standards and implementation profiles based on
+these specifications may include additional constraints.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Other cryptographic techniques based on passwords, such as password-based key
+entity authentication and key establishment protocols are outside the scope of
+this document.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-5">The password-based key derivation functions described in this document
+are not memory-hard and do not offer protection against attacks using
+custom hardware. If possible, consider using scrypt <span>[<a href="#RFC7914" class="cite xref">RFC7914</a>]</span> or
+Argon2 <span>[<a href="#RFC9106" class="cite xref">RFC9106</a>]</span> instead.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-6">Guidelines for the selection of passwords are also outside the scope. This
+document supersedes PKCS #5 version 2.1 <span>[<a href="#RFC8018" class="cite xref">RFC8018</a>]</span> and removes techniques
+it has previouslly obsoleted.<a href="#section-1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1326,7 +1324,7 @@ perform cryptographic operations with it. Moreover, as passwords are
 often chosen from a relatively small space, special care is required in
 that processing to defend against search attacks.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <p id="section-4-2">A general approach to password-based cryptography, as described by
-Morris and Thompson [MORRIS] for the protection of password tables, is
+Morris and Thompson <span>[<a href="#MORRIS" class="cite xref">MORRIS</a>]</span> for the protection of password tables, is
 to combine a password with a salt to produce a key. The salt can be
 viewed as an index into a large set of keys derived from the password
 and need not be kept secret. Although it may be possible for an opponent
@@ -1335,19 +1333,22 @@ attack"), constructing a table of possible keys will be difficult, since
 there will be many possible keys for each password. An opponent will
 thus be limited to searching through passwords separately for each salt.<a href="#section-4-2" class="pilcrow">¶</a></p>
 <p id="section-4-3">Another approach to password-based cryptography is to construct key
-derivation techniques that are relatively expensive, thereby increasing
-the cost of exhaustive search. One way to do this is to include an
-iteration count in the key derivation technique, indicating how many
-times to iterate some underlying function by which keys are derived. A
-modest number of iterations (say, 1000) is not likely to be a burden for
-legitimate parties when computing a key, but will be a significant
-burden for opponents.<a href="#section-4-3" class="pilcrow">¶</a></p>
-<p id="section-4-4">Salt and iteration count formed the basis for password-based encryption
-in PKCS #5 v2.0, and are adopted here as well for the various
-cryptographic operations. Thus, password-based key derivation as defined
-here is a function of a password, a salt, and an iteration count, where
-the latter two quantities need not be kept secret.<a href="#section-4-4" class="pilcrow">¶</a></p>
-<p id="section-4-5">From a password-based key derivation function, it is straightforward to
+derivation techniques that are relatively expensive, thereby
+increasing the cost of exhaustive search. One way to do this is to
+include an iteration count in the key derivation technique, indicating
+how many times to iterate some underlying function by which keys are
+derived. A modest number of iterations (say, 1000) is not likely to be
+a burden for legitimate parties when computing a key, but also trivial
+to attack with custom hardware.<a href="#section-4-3" class="pilcrow">¶</a></p>
+<p id="section-4-4">Whenever possible, please switch from functions described here to
+memory-hard function such as scrypt <span>[<a href="#RFC7914" class="cite xref">RFC7914</a>]</span> or Argon2
+<span>[<a href="#RFC9106" class="cite xref">RFC9106</a>]</span> instead.<a href="#section-4-4" class="pilcrow">¶</a></p>
+<p id="section-4-5">Salt and iteration count formed the basis for password-based
+encryption in PKCS #5 v2.0, and are adopted here as well for the
+various cryptographic operations. Thus, password-based key derivation
+as defined here is a function of a password, a salt, and an iteration
+count, where the latter two quantities need not be kept secret.<a href="#section-4-5" class="pilcrow">¶</a></p>
+<p id="section-4-6">From a password-based key derivation function, it is straightforward to
 define password-based encryption and message authentication schemes. As
 in PKCS #5 v2.0, the password-based encryption schemes here are based on
 an underlying, conventional encryption scheme, where the key for the
@@ -1355,27 +1356,24 @@ conventional scheme is derived from the password. Similarly, the
 password-based message authentication scheme is based on an underlying
 conventional scheme. This two-layered approach makes the password-based
 techniques modular in terms of the underlying techniques they can be
-based on.<a href="#section-4-5" class="pilcrow">¶</a></p>
-<p id="section-4-6">It is expected that the password-based key derivation functions may find
-other applications than just the encryption and message authentication
-schemes defined here. For instance, one might derive a set of keys with
-a single application of a key derivation function, rather than derive
-each key with a separate application of the function. The keys in the
-set would be obtained as substrings of the output of the key derivation
-function. This approach might be employed as part of key establishment
-in a session-oriented protocol. Another application is password
-checking, where the output of the key derivation function is stored
-(along with the salt and iteration count) for the purposes of subsequent
-verification of a password.<a href="#section-4-6" class="pilcrow">¶</a></p>
-<p id="section-4-7">Throughout this document, a password is considered to be an octet string
-of arbitrary length whose interpretation as a text string is
+based on.<a href="#section-4-6" class="pilcrow">¶</a></p>
+<p id="section-4-7">It is expected that the password-based key derivation functions may
+find other applications than just the encryption and message
+authentication schemes defined here. For instance, one might use the
+output produced by key derivation function described here as the
+keying material input to HKDF <span>[<a href="#RFC5869" class="cite xref">RFC5869</a>]</span>. Another application is
+password checking, where the output of the key derivation function is
+stored (along with the salt and iteration count) for the purposes of
+subsequent verification of a password.<a href="#section-4-7" class="pilcrow">¶</a></p>
+<p id="section-4-8">Throughout this document, a password is considered to be an octet
+string of arbitrary length whose interpretation as a text string is
 unspecified. In the interest of interoperability, however, it is
 recommended that applications follow some common text encoding rules.
-ASCII and UTF-8 [RFC3629] are two possibilities. (ASCII is a subset of
-UTF-8.)<a href="#section-4-7" class="pilcrow">¶</a></p>
-<p id="section-4-8">Although the selection of passwords is outside the scope of this
-document, guidelines have been published [NISTSP63] that may well be
-taken into account.<a href="#section-4-8" class="pilcrow">¶</a></p>
+ASCII and UTF-8 <span>[<a href="#RFC3629" class="cite xref">RFC3629</a>]</span> are two possibilities. (ASCII is a subset
+of UTF-8.)<a href="#section-4-8" class="pilcrow">¶</a></p>
+<p id="section-4-9">Although the selection of passwords is outside the scope of this
+document, guidelines have been published <span>[<a href="#SP800-63b" class="cite xref">SP800-63b</a>]</span> that may well be
+taken into account.<a href="#section-4-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="salt-and-iteration-count">
@@ -1467,29 +1465,42 @@ the additional data is left to the application.<a href="#section-5.1-9.3.1" clas
 <p id="section-5.1-10">If a random number generator or pseudorandom generator is not available,
 a deterministic alternative for generating the salt must not be made
 available.<a href="#section-5.1-10" class="pilcrow">¶</a></p>
-<p id="section-5.1-11">4.2. Iteration Count<a href="#section-5.1-11" class="pilcrow">¶</a></p>
-<p id="section-5.1-12">An iteration count has traditionally served the purpose of increasing
+</section>
+</div>
+<div id="iteration-count">
+<section id="section-5.2">
+        <h3 id="name-iteration-count">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-iteration-count" class="section-name selfRef">Iteration Count</a>
+        </h3>
+<p id="section-5.2-1">An iteration count has traditionally served the purpose of increasing
 the cost of producing keys from a password, thereby also increasing the
 difficulty of attack. Mathematically, an iteration count of c will
 increase the security strength of a password by log2(c) bits against
-trial-based attacks like brute force or dictionary attacks.<a href="#section-5.1-12" class="pilcrow">¶</a></p>
-<p id="section-5.1-13">Choosing a reasonable value for the iteration count depends on
+trial-based attacks like brute force or dictionary attacks.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">Choosing a reasonable value for the iteration count depends on
 environment and circumstances, and varies from application to
-application. Many  computing power of general purpose
-and bespoke hardware, demonstrate significantly increased<a href="#section-5.1-13" class="pilcrow">¶</a></p>
-<p id="section-5.1-14">This document follows the recommendations made in FIPS
-Special Publication 800-132 [NISTSP132], which says<a href="#section-5.1-14" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5.1-15">
-<pre>
-  The iteration count shall be  selected as large as possible, as
-  long as the time required to generate the key using the entered
-  password is acceptable for the users. [...] A minimum iteration
-  count of 1,000 is recommended. For especially critical keys, or
-  for very powerful systems or systems where user-perceived
-  performance is not critical, an iteration count of 10,000,000 may
-  be appropriate.
-</pre><a href="#section-5.1-15" class="pilcrow">¶</a>
-</div>
+application. The computing power of general purpose and bespoke
+hardware has significantly increased in its hashing performance. This
+has been demonstrated by the hashcat <span>[<a href="#HASHCAT" class="cite xref">HASHCAT</a>]</span> software.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">This document broadly follows the OWASP Foundation <span>[<a href="#OWASP-PASSWORD" class="cite xref">OWASP-PASSWORD</a>]</span>
+recommendations:<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.2-4.1">
+            <p id="section-5.2-4.1.1">PBKDF2-HMAC-SHA512: 210,000 iterations (recommended by this document)<a href="#section-5.2-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.2-4.2">
+            <p id="section-5.2-4.2.1">PBKDF2-HMAC-SHA256: 600,000 iterations<a href="#section-5.2-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-5.2-5">The NIST SP 800-63b <span>[<a href="#SP800-63b" class="cite xref">SP800-63b</a>]</span> recommends password of minimum 8
+characters length and calls for support of maximum 64 characters
+length. Given UTF-8 <span>[<a href="#RFC3629" class="cite xref">RFC3629</a>]</span> encoded characters can be up to 4
+bytes long, the block size of 512 bits can be often reached by the
+password. When block size is exceeded it will result in pre-hashing
+the password string to reduce its size, leading to what is known as
+PBKDF2 hash collision <span>[<a href="#PBKDF2COLLISION" class="cite xref">PBKDF2COLLISION</a>]</span>. To avoid such collisions this
+document recommends to choose PBKDF2-HMAC-SHA512 with 210,000
+iterations count due to its larger block size and wide support.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1525,9 +1536,9 @@ Special Publication 800-132 [NISTSP132], which says<a href="#section-5.1-14" cla
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC5958">[RFC5958]</dt>
+<dt id="RFC8018">[RFC8018]</dt>
         <dd>
-<span class="refAuthor">Turner, S.</span>, <span class="refTitle">"Asymmetric Key Packages"</span>, <span class="seriesInfo">RFC 5958</span>, <span class="seriesInfo">DOI 10.17487/RFC5958</span>, <time datetime="2010-08" class="refDate">August 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5958">https://www.rfc-editor.org/rfc/rfc5958</a>&gt;</span>. </dd>
+<span class="refAuthor">Moriarty, K., Ed.</span>, <span class="refAuthor">Kaliski, B.</span>, and <span class="refAuthor">A. Rusch</span>, <span class="refTitle">"PKCS #5: Password-Based Cryptography Specification Version 2.1"</span>, <span class="seriesInfo">RFC 8018</span>, <span class="seriesInfo">DOI 10.17487/RFC8018</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8018">https://www.rfc-editor.org/rfc/rfc8018</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
       <dd>
@@ -1542,13 +1553,53 @@ Special Publication 800-132 [NISTSP132], which says<a href="#section-5.1-14" cla
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
         </h3>
 <dl class="references">
-<dt id="RFC5208">[RFC5208]</dt>
+<dt id="HASHCAT">[HASHCAT]</dt>
         <dd>
-<span class="refAuthor">Kaliski, B.</span>, <span class="refTitle">"Public-Key Cryptography Standards (PKCS) #8: Private-Key Information Syntax Specification Version 1.2"</span>, <span class="seriesInfo">RFC 5208</span>, <span class="seriesInfo">DOI 10.17487/RFC5208</span>, <time datetime="2008-05" class="refDate">May 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5208">https://www.rfc-editor.org/rfc/rfc5208</a>&gt;</span>. </dd>
+<span class="refAuthor">Steube, J.</span>, <span class="refTitle">"hashcat - advanced password recovery"</span>, <time datetime="2015" class="refDate">2015</time>, <span>&lt;<a href="https://hashcat.net/">https://hashcat.net/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8018">[RFC8018]</dt>
+<dt id="MORRIS">[MORRIS]</dt>
+        <dd>
+<span class="refAuthor">Morris, R.</span> and <span class="refAuthor">K. Thompson</span>, <span class="refTitle">"Password security: a case history"</span>, <span class="refContent">Association for Computing Machinery (ACM)</span>, <span class="seriesInfo">Communications of the ACM vol. 22, no. 11, pp. 594-597</span>, <span class="seriesInfo">DOI 10.1145/359168.359172</span>, <time datetime="1979-11" class="refDate">November 1979</time>, <span>&lt;<a href="https://doi.org/10.1145/359168.359172">https://doi.org/10.1145/359168.359172</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OWASP-PASSWORD">[OWASP-PASSWORD]</dt>
+        <dd>
+<span class="refAuthor">Cheat Sheets Series Team</span>, <span class="refTitle">"OWASP Cheat Sheet Series - Password Storage Cheat Sheet"</span>, <time datetime="2025" class="refDate">2025</time>, <span>&lt;<a href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="PBKDF2COLLISION">[PBKDF2COLLISION]</dt>
+        <dd>
+<span class="refAuthor">Bynens, M.</span>, <span class="refTitle">"PBKDF2+HMAC hash collisions explained"</span>, <time datetime="2014" class="refDate">2014</time>, <span>&lt;<a href="https://mathiasbynens.be/notes/pbkdf2-hmac">https://mathiasbynens.be/notes/pbkdf2-hmac</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3629">[RFC3629]</dt>
+        <dd>
+<span class="refAuthor">Yergeau, F.</span>, <span class="refTitle">"UTF-8, a transformation format of ISO 10646"</span>, <span class="seriesInfo">STD 63</span>, <span class="seriesInfo">RFC 3629</span>, <span class="seriesInfo">DOI 10.17487/RFC3629</span>, <time datetime="2003-11" class="refDate">November 2003</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc3629">https://www.rfc-editor.org/rfc/rfc3629</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5652">[RFC5652]</dt>
+        <dd>
+<span class="refAuthor">Housley, R.</span>, <span class="refTitle">"Cryptographic Message Syntax (CMS)"</span>, <span class="seriesInfo">STD 70</span>, <span class="seriesInfo">RFC 5652</span>, <span class="seriesInfo">DOI 10.17487/RFC5652</span>, <time datetime="2009-09" class="refDate">September 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5652">https://www.rfc-editor.org/rfc/rfc5652</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5869">[RFC5869]</dt>
+        <dd>
+<span class="refAuthor">Krawczyk, H.</span> and <span class="refAuthor">P. Eronen</span>, <span class="refTitle">"HMAC-based Extract-and-Expand Key Derivation Function (HKDF)"</span>, <span class="seriesInfo">RFC 5869</span>, <span class="seriesInfo">DOI 10.17487/RFC5869</span>, <time datetime="2010-05" class="refDate">May 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5869">https://www.rfc-editor.org/rfc/rfc5869</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5958">[RFC5958]</dt>
+        <dd>
+<span class="refAuthor">Turner, S.</span>, <span class="refTitle">"Asymmetric Key Packages"</span>, <span class="seriesInfo">RFC 5958</span>, <span class="seriesInfo">DOI 10.17487/RFC5958</span>, <time datetime="2010-08" class="refDate">August 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5958">https://www.rfc-editor.org/rfc/rfc5958</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7914">[RFC7914]</dt>
+        <dd>
+<span class="refAuthor">Percival, C.</span> and <span class="refAuthor">S. Josefsson</span>, <span class="refTitle">"The scrypt Password-Based Key Derivation Function"</span>, <span class="seriesInfo">RFC 7914</span>, <span class="seriesInfo">DOI 10.17487/RFC7914</span>, <time datetime="2016-08" class="refDate">August 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc7914">https://www.rfc-editor.org/rfc/rfc7914</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9106">[RFC9106]</dt>
+        <dd>
+<span class="refAuthor">Biryukov, A.</span>, <span class="refAuthor">Dinu, D.</span>, <span class="refAuthor">Khovratovich, D.</span>, and <span class="refAuthor">S. Josefsson</span>, <span class="refTitle">"Argon2 Memory-Hard Function for Password Hashing and Proof-of-Work Applications"</span>, <span class="seriesInfo">RFC 9106</span>, <span class="seriesInfo">DOI 10.17487/RFC9106</span>, <time datetime="2021-09" class="refDate">September 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9106">https://www.rfc-editor.org/rfc/rfc9106</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SP800-132">[SP800-132]</dt>
+        <dd>
+<span class="refAuthor">Turan, M.</span>, <span class="refAuthor">Barker, E.</span>, <span class="refAuthor">Burr, W.</span>, and <span class="refAuthor">L. Chen</span>, <span class="refTitle">"Recommendation for password-based key derivation :: part 1: storage applications"</span>, <span class="refContent">National Institute of Standards and Technology</span>, <span class="seriesInfo">DOI 10.6028/nist.sp.800-132</span>, <time datetime="2010" class="refDate">2010</time>, <span>&lt;<a href="https://doi.org/10.6028/nist.sp.800-132">https://doi.org/10.6028/nist.sp.800-132</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="SP800-63b">[SP800-63b]</dt>
       <dd>
-<span class="refAuthor">Moriarty, K., Ed.</span>, <span class="refAuthor">Kaliski, B.</span>, and <span class="refAuthor">A. Rusch</span>, <span class="refTitle">"PKCS #5: Password-Based Cryptography Specification Version 2.1"</span>, <span class="seriesInfo">RFC 8018</span>, <span class="seriesInfo">DOI 10.17487/RFC8018</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8018">https://www.rfc-editor.org/rfc/rfc8018</a>&gt;</span>. </dd>
+<span class="refAuthor">Grassi, P.</span>, <span class="refAuthor">Fenton, J.</span>, <span class="refAuthor">Newton, E.</span>, <span class="refAuthor">Perlner, R.</span>, <span class="refAuthor">Regenscheid, A.</span>, <span class="refAuthor">Burr, W.</span>, <span class="refAuthor">Richer, J.</span>, <span class="refAuthor">Lefkovitz, N.</span>, <span class="refAuthor">Danker, J.</span>, <span class="refAuthor">Choong, Y.</span>, <span class="refAuthor">Greene, K.</span>, and <span class="refAuthor">M. Theofanos</span>, <span class="refTitle">"Digital identity guidelines: authentication and lifecycle management"</span>, <span class="refContent">National Institute of Standards and Technology</span>, <span class="seriesInfo">DOI 10.6028/nist.sp.800-63b</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://doi.org/10.6028/nist.sp.800-63b">https://doi.org/10.6028/nist.sp.800-63b</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -1560,7 +1611,8 @@ Special Publication 800-132 [NISTSP132], which says<a href="#section-5.1-14" cla
       <h2 id="name-acknowledgments">
 <a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="appendix-A-1">TODO acknowledge.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<p id="appendix-A-1">This document is based on the <span>[<a href="#RFC8018" class="cite xref">RFC8018</a>]</span>, the IETF republication of PKCS #5 v2.1 from
+RSA Laboratories' Public-Key Cryptography Standards (PKCS) series.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">

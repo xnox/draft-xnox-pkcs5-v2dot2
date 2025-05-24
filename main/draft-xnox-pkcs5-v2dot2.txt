@@ -4,8 +4,8 @@
 
 Network Working Group                                       D. J. Ledkov
 Internet-Draft                                          Chainguard, Inc.
-Intended status: Informational                               16 May 2025
-Expires: 17 November 2025
+Intended status: Informational                               24 May 2025
+Expires: 25 November 2025
 
 
      PKCS #5: Password-Based Cryptography Specification Version 2.2
@@ -18,11 +18,7 @@ Abstract
    encryption schemes, message authentication schemes, and ASN.1 syntax
    identifying the techniques.
 
-   It is based on the RFC 8018, the IETF republication of PKCS #5 v2.1
-   from RSA Laboratories' Public-Key Cryptography Standards (PKCS)
-   series.
-
-   This document obsoletes RFC 8018.
+   This document obsoletes [RFC8018].
 
 About This Document
 
@@ -51,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 November 2025.
+   This Internet-Draft will expire on 25 November 2025.
 
 Copyright Notice
 
@@ -75,6 +71,7 @@ Table of Contents
    4.  Overview
    5.  Salt and Iteration Count
      5.1.  Salt
+     5.2.  Iteration Count
    6.  Security Considerations
    7.  IANA Considerations
    8.  References
@@ -99,23 +96,23 @@ Table of Contents
    The recommendations are intended for general application within
    computer and communications systems and, as such, include a fair
    amount of flexibility.  They are particularly intended for the
-   protection of sensitive information such as private keys as in PKCS
-   #8 [RFC5208] [RFC5958].  It is expected that application standards
-   and implementation profiles based on these specifications may include
-   additional constraints.
+   protection of sensitive information such as private keys as in CMS
+   [RFC5652] and Asymmetric Key Packages [RFC5958].  It is expected that
+   application standards and implementation profiles based on these
+   specifications may include additional constraints.
 
    Other cryptographic techniques based on passwords, such as password-
-   based key entity authentication and key establishment protocols
-   [BELLOV] [JABLON] [WU] are outside the scope of this document.
-   Memory-hard key derivation and proof-of-work schemes are also outside
-   the scope of this document.
+   based key entity authentication and key establishment protocols are
+   outside the scope of this document.
+
+   The password-based key derivation functions described in this
+   document are not memory-hard and do not offer protection against
+   attacks using custom hardware.  If possible, consider using scrypt
+   [RFC7914] or Argon2 [RFC9106] instead.
 
    Guidelines for the selection of passwords are also outside the scope.
    This document supersedes PKCS #5 version 2.1 [RFC8018] and removes
-   techniques previouslly obsoleted.
-
-   This document represents evolution of PKCS #5 v2.1 [PKCS5_21] from
-   RSA Laboratories' Public-Key Cryptography Standards (PKCS) series.
+   techniques it has previouslly obsoleted.
 
 2.  Conventions and Definitions
 
@@ -207,7 +204,11 @@ Table of Contents
    indicating how many times to iterate some underlying function by
    which keys are derived.  A modest number of iterations (say, 1000) is
    not likely to be a burden for legitimate parties when computing a
-   key, but will be a significant burden for opponents.
+   key, but also trivial to attack with custom hardware.
+
+   Whenever possible, please switch from functions described here to
+   memory-hard function such as scrypt [RFC7914] or Argon2 [RFC9106]
+   instead.
 
    Salt and iteration count formed the basis for password-based
    encryption in PKCS #5 v2.0, and are adopted here as well for the
@@ -228,15 +229,12 @@ Table of Contents
 
    It is expected that the password-based key derivation functions may
    find other applications than just the encryption and message
-   authentication schemes defined here.  For instance, one might derive
-   a set of keys with a single application of a key derivation function,
-   rather than derive each key with a separate application of the
-   function.  The keys in the set would be obtained as substrings of the
-   output of the key derivation function.  This approach might be
-   employed as part of key establishment in a session-oriented protocol.
-   Another application is password checking, where the output of the key
-   derivation function is stored (along with the salt and iteration
-   count) for the purposes of subsequent verification of a password.
+   authentication schemes defined here.  For instance, one might use the
+   output produced by key derivation function described here as the
+   keying material input to HKDF [RFC5869].  Another application is
+   password checking, where the output of the key derivation function is
+   stored (along with the salt and iteration count) for the purposes of
+   subsequent verification of a password.
 
    Throughout this document, a password is considered to be an octet
    string of arbitrary length whose interpretation as a text string is
@@ -246,7 +244,7 @@ Table of Contents
    of UTF-8.)
 
    Although the selection of passwords is outside the scope of this
-   document, guidelines have been published [NISTSP63] that may well be
+   document, guidelines have been published [SP800-63b] that may well be
    taken into account.
 
 5.  Salt and Iteration Count
@@ -330,7 +328,7 @@ Table of Contents
    available, a deterministic alternative for generating the salt must
    not be made available.
 
-   4.2.  Iteration Count
+5.2.  Iteration Count
 
    An iteration count has traditionally served the purpose of increasing
    the cost of producing keys from a password, thereby also increasing
@@ -340,19 +338,27 @@ Table of Contents
 
    Choosing a reasonable value for the iteration count depends on
    environment and circumstances, and varies from application to
-   application.  Many computing power of general purpose and bespoke
-   hardware, demonstrate significantly increased
+   application.  The computing power of general purpose and bespoke
+   hardware has significantly increased in its hashing performance.
+   This has been demonstrated by the hashcat [HASHCAT] software.
 
-   This document follows the recommendations made in FIPS Special
-   Publication 800-132 [NISTSP132], which says
+   This document broadly follows the OWASP Foundation [OWASP-PASSWORD]
+   recommendations:
 
-     The iteration count shall be  selected as large as possible, as
-     long as the time required to generate the key using the entered
-     password is acceptable for the users. [...] A minimum iteration
-     count of 1,000 is recommended. For especially critical keys, or
-     for very powerful systems or systems where user-perceived
-     performance is not critical, an iteration count of 10,000,000 may
-     be appropriate.
+   *  PBKDF2-HMAC-SHA512: 210,000 iterations (recommended by this
+      document)
+
+   *  PBKDF2-HMAC-SHA256: 600,000 iterations
+
+   The NIST SP 800-63b [SP800-63b] recommends password of minimum 8
+   characters length and calls for support of maximum 64 characters
+   length.  Given UTF-8 [RFC3629] encoded characters can be up to 4
+   bytes long, the block size of 512 bits can be often reached by the
+   password.  When block size is exceeded it will result in pre-hashing
+   the password string to reduce its size, leading to what is known as
+   PBKDF2 hash collision [PBKDF2COLLISION].  To avoid such collisions
+   this document recommends to choose PBKDF2-HMAC-SHA512 with 210,000
+   iterations count due to its larger block size and wide support.
 
 6.  Security Considerations
 
@@ -371,9 +377,10 @@ Table of Contents
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
-   [RFC5958]  Turner, S., "Asymmetric Key Packages", RFC 5958,
-              DOI 10.17487/RFC5958, August 2010,
-              <https://www.rfc-editor.org/rfc/rfc5958>.
+   [RFC8018]  Moriarty, K., Ed., Kaliski, B., and A. Rusch, "PKCS #5:
+              Password-Based Cryptography Specification Version 2.1",
+              RFC 8018, DOI 10.17487/RFC8018, January 2017,
+              <https://www.rfc-editor.org/rfc/rfc8018>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -381,19 +388,73 @@ Table of Contents
 
 8.2.  Informative References
 
-   [RFC5208]  Kaliski, B., "Public-Key Cryptography Standards (PKCS) #8:
-              Private-Key Information Syntax Specification Version 1.2",
-              RFC 5208, DOI 10.17487/RFC5208, May 2008,
-              <https://www.rfc-editor.org/rfc/rfc5208>.
+   [HASHCAT]  Steube, J., "hashcat - advanced password recovery", 2015,
+              <https://hashcat.net/>.
 
-   [RFC8018]  Moriarty, K., Ed., Kaliski, B., and A. Rusch, "PKCS #5:
-              Password-Based Cryptography Specification Version 2.1",
-              RFC 8018, DOI 10.17487/RFC8018, January 2017,
-              <https://www.rfc-editor.org/rfc/rfc8018>.
+   [MORRIS]   Morris, R. and K. Thompson, "Password security: a case
+              history", Association for Computing Machinery (ACM),
+              Communications of the ACM vol. 22, no. 11, pp. 594-597,
+              DOI 10.1145/359168.359172, November 1979,
+              <https://doi.org/10.1145/359168.359172>.
+
+   [OWASP-PASSWORD]
+              Cheat Sheets Series Team, "OWASP Cheat Sheet Series -
+              Password Storage Cheat Sheet", 2025,
+              <https://cheatsheetseries.owasp.org/cheatsheets/
+              Password_Storage_Cheat_Sheet.html>.
+
+   [PBKDF2COLLISION]
+              Bynens, M., "PBKDF2+HMAC hash collisions explained", 2014,
+              <https://mathiasbynens.be/notes/pbkdf2-hmac>.
+
+   [RFC3629]  Yergeau, F., "UTF-8, a transformation format of ISO
+              10646", STD 63, RFC 3629, DOI 10.17487/RFC3629, November
+              2003, <https://www.rfc-editor.org/rfc/rfc3629>.
+
+   [RFC5652]  Housley, R., "Cryptographic Message Syntax (CMS)", STD 70,
+              RFC 5652, DOI 10.17487/RFC5652, September 2009,
+              <https://www.rfc-editor.org/rfc/rfc5652>.
+
+   [RFC5869]  Krawczyk, H. and P. Eronen, "HMAC-based Extract-and-Expand
+              Key Derivation Function (HKDF)", RFC 5869,
+              DOI 10.17487/RFC5869, May 2010,
+              <https://www.rfc-editor.org/rfc/rfc5869>.
+
+   [RFC5958]  Turner, S., "Asymmetric Key Packages", RFC 5958,
+              DOI 10.17487/RFC5958, August 2010,
+              <https://www.rfc-editor.org/rfc/rfc5958>.
+
+   [RFC7914]  Percival, C. and S. Josefsson, "The scrypt Password-Based
+              Key Derivation Function", RFC 7914, DOI 10.17487/RFC7914,
+              August 2016, <https://www.rfc-editor.org/rfc/rfc7914>.
+
+   [RFC9106]  Biryukov, A., Dinu, D., Khovratovich, D., and S.
+              Josefsson, "Argon2 Memory-Hard Function for Password
+              Hashing and Proof-of-Work Applications", RFC 9106,
+              DOI 10.17487/RFC9106, September 2021,
+              <https://www.rfc-editor.org/rfc/rfc9106>.
+
+   [SP800-132]
+              Turan, M., Barker, E., Burr, W., and L. Chen,
+              "Recommendation for password-based key derivation :: part
+              1: storage applications", National Institute of Standards
+              and Technology, DOI 10.6028/nist.sp.800-132, 2010,
+              <https://doi.org/10.6028/nist.sp.800-132>.
+
+   [SP800-63b]
+              Grassi, P., Fenton, J., Newton, E., Perlner, R.,
+              Regenscheid, A., Burr, W., Richer, J., Lefkovitz, N.,
+              Danker, J., Choong, Y., Greene, K., and M. Theofanos,
+              "Digital identity guidelines: authentication and lifecycle
+              management", National Institute of Standards and
+              Technology, DOI 10.6028/nist.sp.800-63b, June 2017,
+              <https://doi.org/10.6028/nist.sp.800-63b>.
 
 Acknowledgments
 
-   TODO acknowledge.
+   This document is based on the [RFC8018], the IETF republication of
+   PKCS #5 v2.1 from RSA Laboratories' Public-Key Cryptography Standards
+   (PKCS) series.
 
 Author's Address
 
