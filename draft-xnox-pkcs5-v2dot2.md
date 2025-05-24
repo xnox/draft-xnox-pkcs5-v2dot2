@@ -30,7 +30,30 @@ author:
 normative:
 
 informative:
-
+  MORRIS: DOI.10.1145/359168.359172
+  SP800-63b: DOI.10.6028/NIST.SP.800-63b
+  SP800-132: DOI.10.6028/NIST.SP.800-132
+  OWASP-PASSWORD:
+    target: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
+    title: OWASP Cheat Sheet Series - Password Storage Cheat Sheet
+    author:
+      - ins: Cheat Sheets Series Team
+        name: Cheat Sheets Series Team
+    date: 2025
+  HASHCAT:
+    target: https://hashcat.net/
+    title: hashcat - advanced password recovery
+    author:
+      - ins: J. Steube
+        name: Jens Steube
+    date: 2015
+  PBKDF2COLLISION:
+     target: https://mathiasbynens.be/notes/pbkdf2-hmac
+     title: PBKDF2+HMAC hash collisions explained
+     author:
+       - ins: M. Bynens
+         name: Mathias Bynens
+     date: 2014
 
 --- abstract
 
@@ -39,11 +62,7 @@ password-based cryptography, covering key derivation functions,
 encryption schemes, message authentication schemes, and ASN.1 syntax
 identifying the techniques.
 
-It is based on the RFC 8018, the IETF republication of PKCS #5 v2.1 from
-RSA Laboratories' Public-Key Cryptography Standards (PKCS) series.
-
-This document obsoletes RFC 8018.
-
+This document obsoletes {{?RFC8018}}.
 --- middle
 
 # Introduction
@@ -56,26 +75,25 @@ password-based cryptography, covering the following aspects:
 -  message authentication schemes
 -  ASN.1 syntax identifying the techniques
 
-The recommendations are intended for general application within computer
-and communications systems and, as such, include a fair amount of
-flexibility. They are particularly intended for the protection of
-sensitive information such as private keys as in PKCS #8 {{?RFC5208}}
-{{!RFC5958}}. It is expected that application standards and implementation
-profiles based on these specifications may include additional
-constraints.
+The recommendations are intended for general application within computer and
+communications systems and, as such, include a fair amount of flexibility. They
+are particularly intended for the protection of sensitive information such as
+private keys as in CMS {{?RFC5652}} and Asymmetric Key Packages {{?RFC5958}}. It
+is expected that application standards and implementation profiles based on
+these specifications may include additional constraints.
 
-Other cryptographic techniques based on passwords, such as
-password-based key entity authentication and key establishment protocols
-[BELLOV] [JABLON] [WU] are outside the scope of this
-document. Memory-hard key derivation and proof-of-work schemes are also
-outside the scope of this document.
+Other cryptographic techniques based on passwords, such as password-based key
+entity authentication and key establishment protocols are outside the scope of
+this document.
 
-Guidelines for the selection of passwords are also outside the
-scope. This document supersedes PKCS #5 version 2.1 {{?RFC8018}} and
-removes techniques previouslly obsoleted.
+The password-based key derivation functions described in this document
+are not memory-hard and do not offer protection against attacks using
+custom hardware. If possible, consider using scrypt {{?RFC7914}} or
+Argon2 {{?RFC9106}} instead.
 
-This document represents evolution of PKCS #5 v2.1 [PKCS5_21] from RSA
-Laboratories' Public-Key Cryptography Standards (PKCS) series.
+Guidelines for the selection of passwords are also outside the scope. This
+document supersedes PKCS #5 version 2.1 {{!RFC8018}} and removes techniques
+it has previouslly obsoleted.
 
 # Conventions and Definitions
 
@@ -158,19 +176,23 @@ there will be many possible keys for each password. An opponent will
 thus be limited to searching through passwords separately for each salt.
 
 Another approach to password-based cryptography is to construct key
-derivation techniques that are relatively expensive, thereby increasing
-the cost of exhaustive search. One way to do this is to include an
-iteration count in the key derivation technique, indicating how many
-times to iterate some underlying function by which keys are derived. A
-modest number of iterations (say, 1000) is not likely to be a burden for
-legitimate parties when computing a key, but will be a significant
-burden for opponents.
+derivation techniques that are relatively expensive, thereby
+increasing the cost of exhaustive search. One way to do this is to
+include an iteration count in the key derivation technique, indicating
+how many times to iterate some underlying function by which keys are
+derived. A modest number of iterations (say, 1000) is not likely to be
+a burden for legitimate parties when computing a key, but also trivial
+to attack with custom hardware.
 
-Salt and iteration count formed the basis for password-based encryption
-in PKCS #5 v2.0, and are adopted here as well for the various
-cryptographic operations. Thus, password-based key derivation as defined
-here is a function of a password, a salt, and an iteration count, where
-the latter two quantities need not be kept secret.
+Whenever possible, please switch from functions described here to
+memory-hard function such as scrypt {{?RFC7914}} or Argon2
+{{?RFC9106}} instead.
+
+Salt and iteration count formed the basis for password-based
+encryption in PKCS #5 v2.0, and are adopted here as well for the
+various cryptographic operations. Thus, password-based key derivation
+as defined here is a function of a password, a salt, and an iteration
+count, where the latter two quantities need not be kept secret.
 
 From a password-based key derivation function, it is straightforward to
 define password-based encryption and message authentication schemes. As
@@ -182,27 +204,24 @@ conventional scheme. This two-layered approach makes the password-based
 techniques modular in terms of the underlying techniques they can be
 based on.
 
-It is expected that the password-based key derivation functions may find
-other applications than just the encryption and message authentication
-schemes defined here. For instance, one might derive a set of keys with
-a single application of a key derivation function, rather than derive
-each key with a separate application of the function. The keys in the
-set would be obtained as substrings of the output of the key derivation
-function. This approach might be employed as part of key establishment
-in a session-oriented protocol. Another application is password
-checking, where the output of the key derivation function is stored
-(along with the salt and iteration count) for the purposes of subsequent
-verification of a password.
+It is expected that the password-based key derivation functions may
+find other applications than just the encryption and message
+authentication schemes defined here. For instance, one might use the
+output produced by key derivation function described here as the
+keying material input to HKDF {{?RFC5869}}. Another application is
+password checking, where the output of the key derivation function is
+stored (along with the salt and iteration count) for the purposes of
+subsequent verification of a password.
 
-Throughout this document, a password is considered to be an octet string
-of arbitrary length whose interpretation as a text string is
+Throughout this document, a password is considered to be an octet
+string of arbitrary length whose interpretation as a text string is
 unspecified. In the interest of interoperability, however, it is
 recommended that applications follow some common text encoding rules.
-ASCII and UTF-8 [RFC3629] are two possibilities. (ASCII is a subset of
-UTF-8.)
+ASCII and UTF-8 {{?RFC3629}} are two possibilities. (ASCII is a subset
+of UTF-8.)
 
 Although the selection of passwords is outside the scope of this
-document, guidelines have been published [NISTSP63] that may well be
+document, guidelines have been published [SP800-63b] that may well be
 taken into account.
 
 # Salt and Iteration Count
@@ -284,7 +303,7 @@ If a random number generator or pseudorandom generator is not available,
 a deterministic alternative for generating the salt must not be made
 available.
 
-4.2. Iteration Count
+## Iteration Count
 
 An iteration count has traditionally served the purpose of increasing
 the cost of producing keys from a password, thereby also increasing the
@@ -294,20 +313,25 @@ trial-based attacks like brute force or dictionary attacks.
 
 Choosing a reasonable value for the iteration count depends on
 environment and circumstances, and varies from application to
-application. Many  computing power of general purpose
-and bespoke hardware, demonstrate significantly increased
+application. The computing power of general purpose and bespoke
+hardware has significantly increased in its hashing performance. This
+has been demonstrated by the hashcat [HASHCAT] software.
 
-This document follows the recommendations made in FIPS
-Special Publication 800-132 [NISTSP132], which says
+This document broadly follows the OWASP Foundation [OWASP-PASSWORD]
+recommendations:
 
-      The iteration count shall be  selected as large as possible, as
-      long as the time required to generate the key using the entered
-      password is acceptable for the users. [...] A minimum iteration
-      count of 1,000 is recommended. For especially critical keys, or
-      for very powerful systems or systems where user-perceived
-      performance is not critical, an iteration count of 10,000,000 may
-      be appropriate.
+ * PBKDF2-HMAC-SHA512: 210,000 iterations (recommended by this document)
+ * PBKDF2-HMAC-SHA256: 600,000 iterations
 
+The NIST SP 800-63b [SP800-63b] recommends password of minimum 8
+characters length and calls for support of maximum 64 characters
+length. Given UTF-8 {{?RFC3629}} encoded characters can be up to 4
+bytes long, the block size of 512 bits can be often reached by the
+password. When block size is exceeded it will result in pre-hashing
+the password string to reduce its size, leading to what is known as
+PBKDF2 hash collision [PBKDF2COLLISION]. To avoid such collisions this
+document recommends to choose PBKDF2-HMAC-SHA512 with 210,000
+iterations count due to its larger block size and wide support.
 
 # Security Considerations
 
@@ -318,10 +342,10 @@ TODO Security
 
 This document has no IANA actions.
 
-
 --- back
 
 # Acknowledgments
 {:numbered="false"}
 
-TODO acknowledge.
+This document is based on the {{?RFC8018}}, the IETF republication of PKCS #5 v2.1 from
+RSA Laboratories' Public-Key Cryptography Standards (PKCS) series.
