@@ -1231,8 +1231,8 @@ entity authentication and key establishment protocols are outside the scope of
 this document.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <p id="section-1-5">The password-based key derivation functions described in this document
 are not memory-hard and do not offer protection against attacks using
-custom hardware. If possible, consider using scrypt <span>[<a href="#RFC7914" class="cite xref">RFC7914</a>]</span> or
-Argon2 <span>[<a href="#RFC9106" class="cite xref">RFC9106</a>]</span> instead.<a href="#section-1-5" class="pilcrow">¶</a></p>
+custom hardware. If possible, consider using scrypt <span>[<a href="#RFC7914" class="cite xref">RFC7914</a>]</span>,
+yescrypt <span>[<a href="#YESCRYPT" class="cite xref">YESCRYPT</a>]</span> or Argon2 <span>[<a href="#RFC9106" class="cite xref">RFC9106</a>]</span> instead.<a href="#section-1-5" class="pilcrow">¶</a></p>
 <p id="section-1-6">Guidelines for the selection of passwords are also outside the scope. This
 document supersedes PKCS #5 version 2.1 <span>[<a href="#RFC8018" class="cite xref">RFC8018</a>]</span> and removes techniques
 it has previouslly obsoleted.<a href="#section-1-6" class="pilcrow">¶</a></p>
@@ -1341,8 +1341,8 @@ derived. A modest number of iterations (say, 1000) is not likely to be
 a burden for legitimate parties when computing a key, but also trivial
 to attack with custom hardware.<a href="#section-4-3" class="pilcrow">¶</a></p>
 <p id="section-4-4">Whenever possible, please switch from functions described here to
-memory-hard function such as scrypt <span>[<a href="#RFC7914" class="cite xref">RFC7914</a>]</span> or Argon2
-<span>[<a href="#RFC9106" class="cite xref">RFC9106</a>]</span> instead.<a href="#section-4-4" class="pilcrow">¶</a></p>
+memory-hard function such as scrypt <span>[<a href="#RFC7914" class="cite xref">RFC7914</a>]</span>, yescrypt <span>[<a href="#YESCRYPT" class="cite xref">YESCRYPT</a>]</span>
+or Argon2 <span>[<a href="#RFC9106" class="cite xref">RFC9106</a>]</span> instead.<a href="#section-4-4" class="pilcrow">¶</a></p>
 <p id="section-4-5">Salt and iteration count formed the basis for password-based
 encryption in PKCS #5 v2.0, and are adopted here as well for the
 various cryptographic operations. Thus, password-based key derivation
@@ -1483,13 +1483,13 @@ application. The computing power of general purpose and bespoke
 hardware has significantly increased in its hashing performance. This
 has been demonstrated by the hashcat <span>[<a href="#HASHCAT" class="cite xref">HASHCAT</a>]</span> software.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
 <p id="section-5.2-3">This document broadly follows the OWASP Foundation <span>[<a href="#OWASP-PASSWORD" class="cite xref">OWASP-PASSWORD</a>]</span>
-recommendations:<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+recommendations, but preffers SHA512:<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5.2-4.1">
-            <p id="section-5.2-4.1.1">PBKDF2-HMAC-SHA512: 210,000 iterations (recommended by this document)<a href="#section-5.2-4.1.1" class="pilcrow">¶</a></p>
+            <p id="section-5.2-4.1.1">PBKDF2-HMAC-SHA512: 210,000 iterations or higher (recommended)<a href="#section-5.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-5.2-4.2">
-            <p id="section-5.2-4.2.1">PBKDF2-HMAC-SHA256: 600,000 iterations<a href="#section-5.2-4.2.1" class="pilcrow">¶</a></p>
+            <p id="section-5.2-4.2.1">PBKDF2-HMAC-SHA256: 600,000 iterations or higher<a href="#section-5.2-4.2.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
 <p id="section-5.2-5">The NIST SP 800-63b <span>[<a href="#SP800-63b" class="cite xref">SP800-63b</a>]</span> recommends password of minimum 8
@@ -1500,7 +1500,9 @@ password. When block size is exceeded it will result in pre-hashing
 the password string to reduce its size, leading to what is known as
 PBKDF2 hash collision <span>[<a href="#PBKDF2COLLISION" class="cite xref">PBKDF2COLLISION</a>]</span>. To avoid such collisions this
 document recommends to choose PBKDF2-HMAC-SHA512 with 210,000
-iterations count due to its larger block size and wide support.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
+iterations count due to its larger block size and wide
+support. PBKDF2-HMAC-SHA256 with 600,000 iterations count may be used
+when SHA512 is not available.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1598,8 +1600,12 @@ iterations count due to its larger block size and wide support.<a href="#section
 <span class="refAuthor">Turan, M.</span>, <span class="refAuthor">Barker, E.</span>, <span class="refAuthor">Burr, W.</span>, and <span class="refAuthor">L. Chen</span>, <span class="refTitle">"Recommendation for password-based key derivation :: part 1: storage applications"</span>, <span class="refContent">National Institute of Standards and Technology</span>, <span class="seriesInfo">DOI 10.6028/nist.sp.800-132</span>, <time datetime="2010" class="refDate">2010</time>, <span>&lt;<a href="https://doi.org/10.6028/nist.sp.800-132">https://doi.org/10.6028/nist.sp.800-132</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="SP800-63b">[SP800-63b]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Grassi, P.</span>, <span class="refAuthor">Fenton, J.</span>, <span class="refAuthor">Newton, E.</span>, <span class="refAuthor">Perlner, R.</span>, <span class="refAuthor">Regenscheid, A.</span>, <span class="refAuthor">Burr, W.</span>, <span class="refAuthor">Richer, J.</span>, <span class="refAuthor">Lefkovitz, N.</span>, <span class="refAuthor">Danker, J.</span>, <span class="refAuthor">Choong, Y.</span>, <span class="refAuthor">Greene, K.</span>, and <span class="refAuthor">M. Theofanos</span>, <span class="refTitle">"Digital identity guidelines: authentication and lifecycle management"</span>, <span class="refContent">National Institute of Standards and Technology</span>, <span class="seriesInfo">DOI 10.6028/nist.sp.800-63b</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://doi.org/10.6028/nist.sp.800-63b">https://doi.org/10.6028/nist.sp.800-63b</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="YESCRYPT">[YESCRYPT]</dt>
+      <dd>
+<span class="refAuthor">Peslyak (S Designer), A.</span>, <span class="refTitle">"openwall yescrypt - scalable KDF and password hashing scheme"</span>, <time datetime="2018" class="refDate">2018</time>, <span>&lt;<a href="https://www.openwall.com/yescrypt/">https://www.openwall.com/yescrypt/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
