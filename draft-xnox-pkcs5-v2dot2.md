@@ -338,10 +338,10 @@ bytes long, the block size of 512 bits can be often reached by the
 password. When block size is exceeded it will result in pre-hashing
 the password string to reduce its size, leading to what is known as
 PBKDF2 hash collision [PBKDF2COLLISION]. To avoid such collisions this
-document recommends to choose PBKDF2-HMAC-SHA512 with 210,000
+document recommends to choose PBKDF2-HMAC-SHA512 with at least 210,000
 iterations count due to its larger block size and wide
-support. PBKDF2-HMAC-SHA256 with 600,000 iterations count may be used
-when SHA512 is not available.
+support. PBKDF2-HMAC-SHA256 with at least 600,000 iterations count may
+be used when SHA512 is not available.
 
 # Security Considerations
 
