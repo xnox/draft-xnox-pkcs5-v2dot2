@@ -54,6 +54,14 @@ informative:
        - ins: M. Bynens
          name: Mathias Bynens
      date: 2014
+  YESCRYPT:
+     target: https://www.openwall.com/yescrypt/
+     title: openwall yescrypt - scalable KDF and password hashing scheme
+     author:
+       - ins: A. Peslyak (S. Designer)
+         name: Alexander Peslyak (Solar Designer)
+     date: 2018
+
 
 --- abstract
 
@@ -88,8 +96,8 @@ this document.
 
 The password-based key derivation functions described in this document
 are not memory-hard and do not offer protection against attacks using
-custom hardware. If possible, consider using scrypt {{?RFC7914}} or
-Argon2 {{?RFC9106}} instead.
+custom hardware. If possible, consider using scrypt {{?RFC7914}},
+yescrypt [YESCRYPT] or Argon2 {{?RFC9106}} instead.
 
 Guidelines for the selection of passwords are also outside the scope. This
 document supersedes PKCS #5 version 2.1 {{!RFC8018}} and removes techniques
@@ -185,8 +193,8 @@ a burden for legitimate parties when computing a key, but also trivial
 to attack with custom hardware.
 
 Whenever possible, please switch from functions described here to
-memory-hard function such as scrypt {{?RFC7914}} or Argon2
-{{?RFC9106}} instead.
+memory-hard function such as scrypt {{?RFC7914}}, yescrypt [YESCRYPT]
+or Argon2 {{?RFC9106}} instead.
 
 Salt and iteration count formed the basis for password-based
 encryption in PKCS #5 v2.0, and are adopted here as well for the
@@ -318,10 +326,10 @@ hardware has significantly increased in its hashing performance. This
 has been demonstrated by the hashcat [HASHCAT] software.
 
 This document broadly follows the OWASP Foundation [OWASP-PASSWORD]
-recommendations:
+recommendations, but preffers SHA512:
 
- * PBKDF2-HMAC-SHA512: 210,000 iterations (recommended by this document)
- * PBKDF2-HMAC-SHA256: 600,000 iterations
+ * PBKDF2-HMAC-SHA512: 210,000 iterations or higher (recommended)
+ * PBKDF2-HMAC-SHA256: 600,000 iterations or higher
 
 The NIST SP 800-63b [SP800-63b] recommends password of minimum 8
 characters length and calls for support of maximum 64 characters
@@ -331,7 +339,9 @@ password. When block size is exceeded it will result in pre-hashing
 the password string to reduce its size, leading to what is known as
 PBKDF2 hash collision [PBKDF2COLLISION]. To avoid such collisions this
 document recommends to choose PBKDF2-HMAC-SHA512 with 210,000
-iterations count due to its larger block size and wide support.
+iterations count due to its larger block size and wide
+support. PBKDF2-HMAC-SHA256 with 600,000 iterations count may be used
+when SHA512 is not available.
 
 # Security Considerations
 
