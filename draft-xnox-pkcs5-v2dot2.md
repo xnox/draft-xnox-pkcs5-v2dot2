@@ -243,27 +243,27 @@ A salt in password-based cryptography has traditionally served the
 purpose of producing a large set of keys corresponding to a given
 password, one of which is selected at random according to the salt. An
 individual key in the set is selected by applying a key derivation
-function KDF, as
+function KeyDerivationFunction, as
 
-                           DK = KDF (P, S)
+         DerivedKey = KeyDerivationFunction (Password, Salt)
 
-where DK is the derived key, P is the password, and S is the salt.  This
-has two benefits:
+where output DerivedKey is the derived key, with Password and Salt as
+inputs. This has two benefits:
 
-   1. It is difficult for an opponent to precompute all the keys, or
-      even the most likely keys, corresponding to a dictionary of
-      passwords. If the salt is 128 bits long, for instance, there will
-      be as many as 2^128 keys for each password. An opponent is thus
-      limited to searching for passwords after a password- based
-      operation has been performed and the salt is known.
+1. It is difficult for an opponent to precompute all the keys, or
+   even the most likely keys, corresponding to a dictionary of
+   passwords. If the salt is 128 bits long, for instance, there will
+   be as many as 2^128 keys for each password. An opponent is thus
+   limited to searching for passwords after a password- based
+   operation has been performed and the salt is known.
 
-   2. It is unlikely that the same key will be selected twice. Again, if
-      the salt is 128 bits long, the chance of "collision" between keys
-      does not become significant until about 2^64 keys have been
-      produced, according to the Birthday Paradox. The fact that
-      collisions are unlikely addresses some concerns about interactions
-      between multiple uses of the same key that may arise when using
-      some encryption and authentication techniques.
+2. It is unlikely that the same key will be selected twice. Again, if
+   the salt is 128 bits long, the chance of "collision" between keys
+   does not become significant until about 2^64 keys have been
+   produced, according to the Birthday Paradox. The fact that
+   collisions are unlikely addresses some concerns about interactions
+   between multiple uses of the same key that may arise when using
+   some encryption and authentication techniques.
 
 In password-based encryption, the party encrypting a message can gain
 assurance that these benefits are realized simply by selecting a large
