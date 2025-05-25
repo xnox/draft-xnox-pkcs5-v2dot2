@@ -262,12 +262,12 @@ Table of Contents
    purpose of producing a large set of keys corresponding to a given
    password, one of which is selected at random according to the salt.
    An individual key in the set is selected by applying a key derivation
-   function KDF, as
+   function KeyDerivationFunction, as
 
-                          DK = KDF (P, S)
+        DerivedKey = KeyDerivationFunction (Password, Salt)
 
-   where DK is the derived key, P is the password, and S is the salt.
-   This has two benefits:
+   where output DerivedKey is the derived key, with Password and Salt as
+   inputs.  This has two benefits:
 
    1.  It is difficult for an opponent to precompute all the keys, or
        even the most likely keys, corresponding to a dictionary of
@@ -365,6 +365,10 @@ Table of Contents
    support.  PBKDF2-HMAC-SHA256 with at least 600,000 iterations count
    may be used when SHA512 is not available.
 
+   When choosing iteration count for other PRF functions, consult
+   benchmarks of commonly available and specialised hardware to have
+   hashing speed similar to the above rates or slower (thus harder).
+
 6.  Key Derivation Function
 
    A key derivation function produces a derived key from a base key and
@@ -404,67 +408,74 @@ Table of Contents
    for the derived key may be limited by the structure of the underlying
    pseudorandom function.  See Appendix B.1 for further discussion.)
 
-   PBKDF2 (P, S, c, dkLen)
+   DerivedKey = PBKDF2 (Password, Salt, IterationCount, DerivedKeyLength)
 
-   Options:        PRF        underlying pseudorandom function (hLen
-                              denotes the length in octets of the
-                              pseudorandom function output)
+   Options
 
-   Input:          P          password, an octet string
-                   S          salt, an octet string
-                   c          iteration count, a positive integer
-                   dkLen      intended length in octets of the derived
-                              key, a positive integer, at most
-                              (2^32 - 1) * hLen
+   *  PRF - Pseudorandom function (hashLength denotes the length in
+      octets of the pseudorandom function output)
 
-   Output:         DK         derived key, a dkLen-octet string
+   Inputs:
+
+   *  Password - an octet string
+
+   *  Salt - an octet string
+
+   *  IterationCount - a positive integer
+
+   *  DerivedKeyLength - intended length in octets of the derived key, a
+      positive integener, maxumum value (2^32 - 1) * hashLength
+
+   Outputs:
+
+   *  DerivedKey, a DerivedKeyLength long octet string
 
    Steps:
 
-      1.  If dkLen > (2^32 - 1) * hLen, output "derived key too long"
-          and stop.
+     1.  If dkLen > (2^32 - 1) * hLen, output "derived key too long"
+         and stop.
 
-      2.  Let l be the number of hLen-octet blocks in the derived key,
-          rounding up, and let r be the number of octets in the last
-          block:
+     2.  Let l be the number of hLen-octet blocks in the derived key,
+         rounding up, and let r be the number of octets in the last
+         block:
 
-                   l = CEIL (dkLen / hLen)
-                   r = dkLen - (l - 1) * hLen
+                  l = CEIL (dkLen / hLen)
+                  r = dkLen - (l - 1) * hLen
 
-          Here, CEIL (x) is the "ceiling" function, i.e., the smallest
-          integer greater than, or equal to, x.
+         Here, CEIL (x) is the "ceiling" function, i.e., the smallest
+         integer greater than, or equal to, x.
 
-      3.  For each block of the derived key apply the function F defined
-          below to the password P, the salt S, the iteration count c,
-          and the block index to compute the block:
+     3.  For each block of the derived key apply the function F defined
+         below to the password P, the salt S, the iteration count c,
+         and the block index to compute the block:
 
-                   T_1 = F (P, S, c, 1) ,
-                   T_2 = F (P, S, c, 2) ,
-                   ...
-                   T_l = F (P, S, c, l) ,
+                  T_1 = F (P, S, c, 1) ,
+                  T_2 = F (P, S, c, 2) ,
+                  ...
+                  T_l = F (P, S, c, l) ,
 
-          where the function F is defined as the exclusive-or sum of the
-          first c iterates of the underlying pseudorandom function PRF
-          applied to the password P and the concatenation of the salt S
-          and the block index i:
+         where the function F is defined as the exclusive-or sum of the
+         first c iterates of the underlying pseudorandom function PRF
+         applied to the password P and the concatenation of the salt S
+         and the block index i:
 
-                   F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
+                  F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
 
-          where
-                   U_1 = PRF (P, S || INT (i)) ,
-                   U_2 = PRF (P, U_1) ,
-                   ...
-                   U_c = PRF (P, U_{c-1}) .
+         where
+                  U_1 = PRF (P, S || INT (i)) ,
+                  U_2 = PRF (P, U_1) ,
+                  ...
+                  U_c = PRF (P, U_{c-1}) .
 
-          Here, INT (i) is a four-octet encoding of the integer i, most
-          significant octet first.
+         Here, INT (i) is a four-octet encoding of the integer i, most
+         significant octet first.
 
-      4.  Concatenate the blocks and extract the first dkLen octets to
-          produce a derived key DK:
+     4.  Concatenate the blocks and extract the first dkLen octets to
+         produce a derived key DK:
 
-                   DK = T_1 || T_2 ||  ...  || T_l<0..r-1>
+                  DK = T_1 || T_2 ||  ...  || T_l<0..r-1>
 
-      5.  Output the derived key DK.
+     5.  Output the derived key DK.
 
    Note: The construction of the function F follows a "belt-and-
    suspenders" approach.  The iterates U_i are computed recursively to
