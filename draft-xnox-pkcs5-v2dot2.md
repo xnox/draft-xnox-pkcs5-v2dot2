@@ -58,7 +58,7 @@ informative:
      target: https://www.openwall.com/yescrypt/
      title: openwall yescrypt - scalable KDF and password hashing scheme
      author:
-       - ins: A. Peslyak (S. Designer)
+       - ins: A. Peslyak (Solar Designer)
          name: Alexander Peslyak (Solar Designer)
      date: 2018
 
