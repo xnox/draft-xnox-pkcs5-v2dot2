@@ -128,57 +128,79 @@ Table of Contents
 
 3.  Notation
 
-    C       ciphertext, an octet string
+   C:
+      ciphertext, an octet string
 
-    c       iteration count, a positive integer
+   IterationCount:
+      iteration count, a positive integer
 
-    DK      derived key, an octet string
+   DerivedKey:
+      derived key, an octet string
 
-    dkLen   length in octets of derived key, a positive integer
+   DerivedKeyLength:
+      length in octets of the derived key, a positive integer
 
-    EM      encoded message, an octet string
+   EM:
+      encoded message, an octet string
 
-    Hash    underlying hash function
+   Hash:
+      underlying hash function
 
-    hLen    length in octets of pseudorandom function output, a positive
-            integer
+   HashLength:
+      length in octets of pseudorandom function output, a positive
+      integer
 
-    l       length in blocks of derived key, a positive integer
+   l:
+      length in blocks of derived key, a positive integer
 
-    IV      initialization vector, an octet string
+   IV:
+      initialization vector, an octet string
 
-    K       encryption key, an octet string
+   K:
+      encryption key, an octet string
 
-    KDF     key derivation function
+   KeyDerivationFunction:
+      key derivation function
 
-    M       message, an octet string
+   Message:
+      message, an octet string
 
-    P       password, an octet string
+   Passwrod:
+      password, an octet string
 
-    PRF     underlying pseudorandom function
+   PRF:
+      underlying pseudorandom function
 
-    PS      padding string, an octet string
+   PS:
+      padding string, an octet string
 
-    psLen   length in octets of padding string, a positive integer
+   psLen:
+      length in octets of padding string, a positive integer
 
-    S       salt, an octet string
+   Salt:
+      salt, an octet string
 
-    T       message authentication code, an octet string
+   T:
+      message authentication code, an octet string
 
-    T_1, ..., T_l, U_1, ..., U_c
-            intermediate values, octet strings
+   T_1, ..., T_l, U_1, ..., U_c:
+      intermediate values, octet strings
 
-    01, 02, ..., 08
-            octets with value 1, 2, ..., 8
+   01, 02, ..., 08:
+      octets with value 1, 2, ..., 8
 
-    \xor    bit-wise exclusive-or of two octet strings
+   \xor:
+      bit-wise exclusive-or of two octet strings
 
-    ||  ||  octet length operator
+   || ||:
+      octet length operator
 
-    ||      concatenation operator
+   ||:
+      concatenation operator
 
-    i..j  substring extraction operator: extracts octets i through j,
-            0 <= i <= j
+   i..j:
+      substring extraction operator: extracts octets i through j, 0 <= i
+      <= j
 
 4.  Overview
 
@@ -336,9 +358,10 @@ Table of Contents
 
    An iteration count has traditionally served the purpose of increasing
    the cost of producing keys from a password, thereby also increasing
-   the difficulty of attack.  Mathematically, an iteration count of c
-   will increase the security strength of a password by log2(c) bits
-   against trial-based attacks like brute force or dictionary attacks.
+   the difficulty of attack.  Mathematically, an iteration count will
+   increase the security strength of a password by log2(IteractionCount)
+   bits against trial-based attacks like brute force or dictionary
+   attacks.
 
    Choosing a reasonable value for the iteration count depends on
    environment and circumstances, and varies from application to
@@ -385,10 +408,9 @@ Table of Contents
    A typical application of the key derivation functions defined here
    might include the following steps:
 
-   1.  Select a salt S and an iteration count c, as outlined in
-       Section 5.
+   1.  Select a Salt and an IterationCount, as outlined in Section 5.
 
-   2.  Select a length in octets for the derived key, dkLen.
+   2.  Select a length in octets for the derived key, DerivedKeyLength.
 
    3.  Apply the key derivation function to the password, the salt, the
        iteration count and the key length to produce a derived key.
@@ -397,8 +419,8 @@ Table of Contents
 
    Only a single key can be derived.  Any number of additional keys may
    not be derived from a password by varying the salt.  If additional
-   keys are needed use the derived key as input material to HKDF
-   [RFC5869].
+   keys are needed use the derived key as input material to and Extract
+   and Expand function such as HKDF [RFC5869].
 
 6.1.  PBKDF2
 
@@ -408,7 +430,7 @@ Table of Contents
    for the derived key may be limited by the structure of the underlying
    pseudorandom function.  See Appendix B.1 for further discussion.)
 
-   DerivedKey = PBKDF2 (Password, Salt, IterationCount, DerivedKeyLength)
+  DerivedKey = PBKDF2 (Password, Salt, IterationCount, DerivedKeyLength)
 
    Options
 

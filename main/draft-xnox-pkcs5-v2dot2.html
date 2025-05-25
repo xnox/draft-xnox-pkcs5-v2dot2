@@ -1268,61 +1268,132 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-notation">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-notation" class="section-name selfRef">Notation</a>
       </h2>
-<div class="alignLeft art-text artwork" id="section-3-1">
-<pre>
-   C       ciphertext, an octet string
-
-   c       iteration count, a positive integer
-
-   DK      derived key, an octet string
-
-   dkLen   length in octets of derived key, a positive integer
-
-   EM      encoded message, an octet string
-
-   Hash    underlying hash function
-
-   hLen    length in octets of pseudorandom function output, a positive
-           integer
-
-   l       length in blocks of derived key, a positive integer
-
-   IV      initialization vector, an octet string
-
-   K       encryption key, an octet string
-
-   KDF     key derivation function
-
-   M       message, an octet string
-
-   P       password, an octet string
-
-   PRF     underlying pseudorandom function
-
-   PS      padding string, an octet string
-
-   psLen   length in octets of padding string, a positive integer
-
-   S       salt, an octet string
-
-   T       message authentication code, an octet string
-
-   T_1, ..., T_l, U_1, ..., U_c
-           intermediate values, octet strings
-
-   01, 02, ..., 08
-           octets with value 1, 2, ..., 8
-
-   \xor    bit-wise exclusive-or of two octet strings
-
-   ||  ||  octet length operator
-
-   ||      concatenation operator
-
-   i..j  substring extraction operator: extracts octets i through j,
-           0 &lt;= i &lt;= j
-</pre><a href="#section-3-1" class="pilcrow">¶</a>
-</div>
+<span class="break"></span><dl class="dlNewline" id="section-3-1">
+        <dt id="section-3-1.1">C:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.2">
+          <p id="section-3-1.2.1">ciphertext, an octet string<a href="#section-3-1.2.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.3">IterationCount:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.4">
+          <p id="section-3-1.4.1">iteration count, a positive integer<a href="#section-3-1.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.5">DerivedKey:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.6">
+          <p id="section-3-1.6.1">derived key, an octet string<a href="#section-3-1.6.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.7">DerivedKeyLength:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.8">
+          <p id="section-3-1.8.1">length in octets of the derived key, a positive integer<a href="#section-3-1.8.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.9">EM:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.10">
+          <p id="section-3-1.10.1">encoded message, an octet string<a href="#section-3-1.10.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.11">Hash:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.12">
+          <p id="section-3-1.12.1">underlying hash function<a href="#section-3-1.12.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.13">HashLength:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.14">
+          <p id="section-3-1.14.1">length in octets of pseudorandom function output, a positive integer<a href="#section-3-1.14.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.15">l:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.16">
+          <p id="section-3-1.16.1">length in blocks of derived key, a positive integer<a href="#section-3-1.16.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.17">IV:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.18">
+          <p id="section-3-1.18.1">initialization vector, an octet string<a href="#section-3-1.18.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.19">K:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.20">
+          <p id="section-3-1.20.1">encryption key, an octet string<a href="#section-3-1.20.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.21">KeyDerivationFunction:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.22">
+          <p id="section-3-1.22.1">key derivation function<a href="#section-3-1.22.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.23">Message:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.24">
+          <p id="section-3-1.24.1">message, an octet string<a href="#section-3-1.24.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.25">Passwrod:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.26">
+          <p id="section-3-1.26.1">password, an octet string<a href="#section-3-1.26.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.27">PRF:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.28">
+          <p id="section-3-1.28.1">underlying pseudorandom function<a href="#section-3-1.28.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.29">PS:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.30">
+          <p id="section-3-1.30.1">padding string, an octet string<a href="#section-3-1.30.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.31">psLen:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.32">
+          <p id="section-3-1.32.1">length in octets of padding string, a positive integer<a href="#section-3-1.32.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.33">Salt:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.34">
+          <p id="section-3-1.34.1">salt, an octet string<a href="#section-3-1.34.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.35">T:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.36">
+          <p id="section-3-1.36.1">message authentication code, an octet string<a href="#section-3-1.36.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.37">T_1, ..., T_l, U_1, ..., U_c:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.38">
+          <p id="section-3-1.38.1">intermediate values, octet strings<a href="#section-3-1.38.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.39">
+<code>01</code>, <code>02</code>, ..., <code>08</code>:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.40">
+          <p id="section-3-1.40.1">octets with value 1, 2, ..., 8<a href="#section-3-1.40.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.41">\xor:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.42">
+          <p id="section-3-1.42.1">bit-wise exclusive-or of two octet strings<a href="#section-3-1.42.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.43">
+<code>||  ||</code>:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.44">
+          <p id="section-3-1.44.1">octet length operator<a href="#section-3-1.44.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.45">
+<code>||</code>:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.46">
+          <p id="section-3-1.46.1">concatenation operator<a href="#section-3-1.46.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-3-1.47">
+<code>i..j</code>:</dt>
+        <dd style="margin-left: 1.5em" id="section-3-1.48">
+          <p id="section-3-1.48.1">substring extraction operator: extracts octets <code>i</code> through <code>j</code>, <code>0 &lt;= i &lt;= j</code><a href="#section-3-1.48.1" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
 </section>
 </div>
 <div id="overview">
@@ -1487,10 +1558,11 @@ available.<a href="#section-5.1-10" class="pilcrow">¶</a></p>
 <a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-iteration-count" class="section-name selfRef">Iteration Count</a>
         </h3>
 <p id="section-5.2-1">An iteration count has traditionally served the purpose of increasing
-the cost of producing keys from a password, thereby also increasing the
-difficulty of attack. Mathematically, an iteration count of c will
-increase the security strength of a password by log2(c) bits against
-trial-based attacks like brute force or dictionary attacks.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+the cost of producing keys from a password, thereby also increasing
+the difficulty of attack. Mathematically, an iteration count will
+increase the security strength of a password by log2(IteractionCount)
+bits against trial-based attacks like brute force or dictionary
+attacks.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
 <p id="section-5.2-2">Choosing a reasonable value for the iteration count depends on
 environment and circumstances, and varies from application to
 application. The computing power of general purpose and bespoke
@@ -1541,13 +1613,14 @@ possible, hence the independent definition of these functions.<a href="#section-
 might include the following steps:<a href="#section-6-3" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6-4">
 <li id="section-6-4.1">
-          <p id="section-6-4.1.1">Select a salt S and an iteration count c, as outlined in <a href="#salt-count" class="auto internal xref">Section 5</a>.<a href="#section-6-4.1.1" class="pilcrow">¶</a></p>
+          <p id="section-6-4.1.1">Select a Salt and an IterationCount, as outlined in <a href="#salt-count" class="auto internal xref">Section 5</a>.<a href="#section-6-4.1.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-6-4.2">
-          <p id="section-6-4.2.1">Select a length in octets for the derived key, dkLen.<a href="#section-6-4.2.1" class="pilcrow">¶</a></p>
+          <p id="section-6-4.2.1">Select a length in octets for the derived key, DerivedKeyLength.<a href="#section-6-4.2.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-6-4.3">
-          <p id="section-6-4.3.1">Apply the key derivation function to the password, the salt, the iteration count and the key length to produce a derived key.<a href="#section-6-4.3.1" class="pilcrow">¶</a></p>
+          <p id="section-6-4.3.1">Apply the key derivation function to the password, the salt, the
+iteration count and the key length to produce a derived key.<a href="#section-6-4.3.1" class="pilcrow">¶</a></p>
 </li>
         <li id="section-6-4.4">
           <p id="section-6-4.4.1">Output the derived key.<a href="#section-6-4.4.1" class="pilcrow">¶</a></p>
@@ -1555,7 +1628,8 @@ might include the following steps:<a href="#section-6-3" class="pilcrow">¶</a><
       </ol>
 <p id="section-6-5">Only a single key can be derived. Any number of additional keys may
 not be derived from a password by varying the salt. If additional keys
-are needed use the derived key as input material to HKDF <span>[<a href="#RFC5869" class="cite xref">RFC5869</a>]</span>.<a href="#section-6-5" class="pilcrow">¶</a></p>
+are needed use the derived key as input material to and Extract and
+Expand function such as HKDF <span>[<a href="#RFC5869" class="cite xref">RFC5869</a>]</span>.<a href="#section-6-5" class="pilcrow">¶</a></p>
 <div id="pbkdf2">
 <section id="section-6.1">
         <h3 id="name-pbkdf2">
@@ -1568,7 +1642,7 @@ derived key may be limited by the structure of the underlying
 pseudorandom function.  See Appendix B.1 for further discussion.)<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6.1-2">
 <pre>
-   DerivedKey = PBKDF2 (Password, Salt, IterationCount, DerivedKeyLength)
+DerivedKey = PBKDF2 (Password, Salt, IterationCount, DerivedKeyLength)
 </pre><a href="#section-6.1-2" class="pilcrow">¶</a>
 </div>
 <p id="section-6.1-3">Options<a href="#section-6.1-3" class="pilcrow">¶</a></p>
