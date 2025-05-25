@@ -293,19 +293,19 @@ encryption, for message authentication, or for some other operation.
 
 Based on this, the following is recommended for salt generation:
 
-   1. The salt must be generated at random and need not be checked for a
-      particular format by the party receiving the salt. It should be at
-      least sixteen octets (128 bits) long.
+1. The salt must be generated at random and need not be checked for a
+   particular format by the party receiving the salt. It should be at
+   least sixteen octets (128 bits) long.
 
-   2. The salt must not contain any data that explicitly distinguishes
-      between different operations, customization string and different
-      key lengths.
+2. The salt must not contain any data that explicitly distinguishes
+   between different operations, customization string and different
+   key lengths.
 
-   3. The encoding of a structure that specifies detailed information
-      about the derived key, such as the encryption or authentication
-      technique, customization string and a sequence number among the
-      different keys derived from the password. The particular format of
-      the additional data is left to the application.
+3. The encoding of a structure that specifies detailed information
+   about the derived key, such as the encryption or authentication
+   technique, customization string and a sequence number among the
+   different keys derived from the password. The particular format of
+   the additional data is left to the application.
 
 If a random number generator or pseudorandom generator is not available,
 a deterministic alternative for generating the salt must not be made
@@ -343,6 +343,10 @@ iterations count due to its larger block size and wide
 support. PBKDF2-HMAC-SHA256 with at least 600,000 iterations count may
 be used when SHA512 is not available.
 
+When choosing iteration count for other PRF functions, consult
+benchmarks of commonly available and specialised hardware to have
+hashing speed similar to the above rates or slower (thus harder).
+
 # Key Derivation Function
 
 A key derivation function produces a derived key from a base key and
@@ -379,22 +383,30 @@ derived key may be limited by the structure of the underlying
 pseudorandom function.  See Appendix B.1 for further discussion.)
 
 ~~~
-   PBKDF2 (P, S, c, dkLen)
+   DerivedKey = PBKDF2 (Password, Salt, IterationCount, DerivedKeyLength)
+~~~
 
-   Options:        PRF        underlying pseudorandom function (hLen
-                              denotes the length in octets of the
-                              pseudorandom function output)
+Options
 
-   Input:          P          password, an octet string
-                   S          salt, an octet string
-                   c          iteration count, a positive integer
-                   dkLen      intended length in octets of the derived
-                              key, a positive integer, at most
-                              (2^32 - 1) * hLen
+  * PRF - Pseudorandom function (hashLength denotes the length in
+    octets of the pseudorandom function output)
 
-   Output:         DK         derived key, a dkLen-octet string
+Inputs:
 
-   Steps:
+  * Password - an octet string
+
+  * Salt - an octet string
+
+  * IterationCount - a positive integer
+
+  * DerivedKeyLength - intended length in octets of the derived key, a
+    positive integener, maxumum value (2^32 - 1) * hashLength
+
+Outputs:
+
+  * DerivedKey, a DerivedKeyLength long octet string
+
+Steps:
 
       1.  If dkLen > (2^32 - 1) * hLen, output "derived key too long"
           and stop.
@@ -440,7 +452,6 @@ pseudorandom function.  See Appendix B.1 for further discussion.)
                    DK = T_1 || T_2 ||  ...  || T_l<0..r-1>
 
       5.  Output the derived key DK.
-~~~
 
 Note: The construction of the function F follows a
 "belt-and-suspenders" approach. The iterates U_i are computed
