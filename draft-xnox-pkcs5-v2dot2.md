@@ -33,7 +33,7 @@ informative:
   MORRIS: DOI.10.1145/359168.359172
   SP800-63b: DOI.10.6028/NIST.SP.800-63b
   SP800-132: DOI.10.6028/NIST.SP.800-132
-  OWASP-PASSWORD:
+  OWASP:
     target: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
     title: OWASP Cheat Sheet Series - Password Storage Cheat Sheet
     author:
@@ -325,7 +325,7 @@ application. The computing power of general purpose and bespoke
 hardware has significantly increased in its hashing performance. This
 has been demonstrated by the hashcat [HASHCAT] software.
 
-This document broadly follows the OWASP Foundation [OWASP-PASSWORD]
+This document broadly follows the OWASP Foundation [OWASP]
 recommendations, but preffers SHA512:
 
  * PBKDF2-HMAC-SHA512: 210,000 iterations or higher (recommended)
