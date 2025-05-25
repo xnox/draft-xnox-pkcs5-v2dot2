@@ -1601,54 +1601,74 @@ positive integener, maxumum value (2^32 - 1) * hashLength<a href="#section-6.1-6
 </li>
         </ul>
 <p id="section-6.1-9">Steps:<a href="#section-6.1-9" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-6.1-10">
+<ol start="1" type="1" class="normal type-1" id="section-6.1-10">
+<li id="section-6.1-10.1">
+            <p id="section-6.1-10.1.1">If DerivedKeyLength &gt; (2^32 - 1) * hashLength, output "derived key
+too long" and stop.<a href="#section-6.1-10.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.1-10.2">
+            <p id="section-6.1-10.2.1">Let l be the number of hashLength-octet blocks in the derived key,
+rounding up, and let r be the number of octets in the last
+block:<a href="#section-6.1-10.2.1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1-10.2.2">
 <pre>
-  1.  If dkLen &gt; (2^32 - 1) * hLen, output "derived key too long"
-      and stop.
-
-  2.  Let l be the number of hLen-octet blocks in the derived key,
-      rounding up, and let r be the number of octets in the last
-      block:
-
-               l = CEIL (dkLen / hLen)
-               r = dkLen - (l - 1) * hLen
-
-      Here, CEIL (x) is the "ceiling" function, i.e., the smallest
-      integer greater than, or equal to, x.
-
-  3.  For each block of the derived key apply the function F defined
-      below to the password P, the salt S, the iteration count c,
-      and the block index to compute the block:
-
-               T_1 = F (P, S, c, 1) ,
-               T_2 = F (P, S, c, 2) ,
-               ...
-               T_l = F (P, S, c, l) ,
-
-      where the function F is defined as the exclusive-or sum of the
-      first c iterates of the underlying pseudorandom function PRF
-      applied to the password P and the concatenation of the salt S
-      and the block index i:
-
-               F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
-
-      where
-               U_1 = PRF (P, S || INT (i)) ,
-               U_2 = PRF (P, U_1) ,
-               ...
-               U_c = PRF (P, U_{c-1}) .
-
-      Here, INT (i) is a four-octet encoding of the integer i, most
-      significant octet first.
-
-  4.  Concatenate the blocks and extract the first dkLen octets to
-      produce a derived key DK:
-
-               DK = T_1 || T_2 ||  ...  || T_l&lt;0..r-1&gt;
-
-  5.  Output the derived key DK.
-</pre><a href="#section-6.1-10" class="pilcrow">¶</a>
+ l = CEILING (DerivedKeyLength / hashLength)
+ r = DerivedKeyLength - (l - 1) * hashLength
+</pre><a href="#section-6.1-10.2.2" class="pilcrow">¶</a>
 </div>
+<p id="section-6.1-10.2.3">
+Here, CEIL (x) is the "ceiling" function, i.e., the smallest
+integer greater than, or equal to, x.<a href="#section-6.1-10.2.3" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.1-10.3">
+            <p id="section-6.1-10.3.1">For each block of the derived key apply the function F defined
+below to the Password, the Salt, the IterationCount, and the block
+index to compute the block:<a href="#section-6.1-10.3.1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1-10.3.2">
+<pre>
+ T_1 = F (Password, Salt, IterationCount, 1)
+ T_2 = F (Password, Salt, IterationCount, 2)
+ ...
+ T_l = F (Password, Salt, IterationCount, l)
+</pre><a href="#section-6.1-10.3.2" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-10.3.3">
+where the function F is defined as the exclusive-or sum of the
+first c iterates of the underlying pseudorandom function PRF
+applied to the password P and the concatenation of the salt S
+and the block index i:<a href="#section-6.1-10.3.3" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1-10.3.4">
+<pre>
+ F (Password, Salt, IterationCount, i) = U_1 \xor U_2 \xor ... \xor U_c
+</pre><a href="#section-6.1-10.3.4" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-10.3.5">
+where<a href="#section-6.1-10.3.5" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1-10.3.6">
+<pre>
+ U_1 = PRF (Password, Salt || INT (i)) ,
+ U_2 = PRF (Password, U_1) ,
+ ...
+ U_c = PRF (Password, U_{c-1}) .
+</pre><a href="#section-6.1-10.3.6" class="pilcrow">¶</a>
+</div>
+<p id="section-6.1-10.3.7">
+Here, INT (i) is a four-octet encoding of the integer i, most
+significant octet first.<a href="#section-6.1-10.3.7" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.1-10.4">
+            <p id="section-6.1-10.4.1">Concatenate the blocks and extract the first DerivedKeyLength
+octets to produce a derived key DerivedKey:<a href="#section-6.1-10.4.1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-6.1-10.4.2">
+<pre>
+ DerivedKey = T_1 || T_2 ||  ...  || T_l&lt;0..r-1&gt;
+</pre><a href="#section-6.1-10.4.2" class="pilcrow">¶</a>
+</div>
+</li>
+          <li id="section-6.1-10.5">
+            <p id="section-6.1-10.5.1">Output the derived key DerivedKey.<a href="#section-6.1-10.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
 <p id="section-6.1-11">Note: The construction of the function F follows a
 "belt-and-suspenders" approach. The iterates U_i are computed
 recursively to remove a degree of parallelism from an opponent; they

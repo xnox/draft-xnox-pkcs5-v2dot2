@@ -432,50 +432,51 @@ Table of Contents
 
    Steps:
 
-     1.  If dkLen > (2^32 - 1) * hLen, output "derived key too long"
-         and stop.
+ 1.  If DerivedKeyLength > (2^32 - 1) * hashLength, output "derived
+     key too long" and stop.
 
-     2.  Let l be the number of hLen-octet blocks in the derived key,
-         rounding up, and let r be the number of octets in the last
-         block:
+ 2.  Let l be the number of hashLength-octet blocks in the derived
+     key, rounding up, and let r be the number of octets in the last
+     block:
 
-                  l = CEIL (dkLen / hLen)
-                  r = dkLen - (l - 1) * hLen
+     l = CEILING (DerivedKeyLength / hashLength)
+     r = DerivedKeyLength - (l - 1) * hashLength
 
-         Here, CEIL (x) is the "ceiling" function, i.e., the smallest
-         integer greater than, or equal to, x.
+     Here, CEIL (x) is the "ceiling" function, i.e., the smallest
+     integer greater than, or equal to, x.
 
-     3.  For each block of the derived key apply the function F defined
-         below to the password P, the salt S, the iteration count c,
-         and the block index to compute the block:
+ 3.  For each block of the derived key apply the function F defined
+     below to the Password, the Salt, the IterationCount, and the
+     block index to compute the block:
 
-                  T_1 = F (P, S, c, 1) ,
-                  T_2 = F (P, S, c, 2) ,
-                  ...
-                  T_l = F (P, S, c, l) ,
+     T_1 = F (Password, Salt, IterationCount, 1)
+     T_2 = F (Password, Salt, IterationCount, 2)
+     ...
+     T_l = F (Password, Salt, IterationCount, l)
 
-         where the function F is defined as the exclusive-or sum of the
-         first c iterates of the underlying pseudorandom function PRF
-         applied to the password P and the concatenation of the salt S
-         and the block index i:
+     where the function F is defined as the exclusive-or sum of the
+     first c iterates of the underlying pseudorandom function PRF
+     applied to the password P and the concatenation of the salt S and
+     the block index i:
 
-                  F (P, S, c, i) = U_1 \xor U_2 \xor ... \xor U_c
+  F (Password, Salt, IterationCount, i) = U_1 \xor U_2 \xor ... \xor U_c
 
-         where
-                  U_1 = PRF (P, S || INT (i)) ,
-                  U_2 = PRF (P, U_1) ,
-                  ...
-                  U_c = PRF (P, U_{c-1}) .
+     where
 
-         Here, INT (i) is a four-octet encoding of the integer i, most
-         significant octet first.
+     U_1 = PRF (Password, Salt || INT (i)) ,
+     U_2 = PRF (Password, U_1) ,
+     ...
+     U_c = PRF (Password, U_{c-1}) .
 
-     4.  Concatenate the blocks and extract the first dkLen octets to
-         produce a derived key DK:
+     Here, INT (i) is a four-octet encoding of the integer i, most
+     significant octet first.
 
-                  DK = T_1 || T_2 ||  ...  || T_l<0..r-1>
+ 4.  Concatenate the blocks and extract the first DerivedKeyLength
+     octets to produce a derived key DerivedKey:
 
-     5.  Output the derived key DK.
+     DerivedKey = T_1 || T_2 ||  ...  || T_l<0..r-1>
+
+ 5.  Output the derived key DerivedKey.
 
    Note: The construction of the function F follows a "belt-and-
    suspenders" approach.  The iterates U_i are computed recursively to
