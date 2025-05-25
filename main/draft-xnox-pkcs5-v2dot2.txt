@@ -4,8 +4,8 @@
 
 Network Working Group                                       D. J. Ledkov
 Internet-Draft                                          Chainguard, Inc.
-Intended status: Informational                               24 May 2025
-Expires: 25 November 2025
+Intended status: Informational                               25 May 2025
+Expires: 26 November 2025
 
 
      PKCS #5: Password-Based Cryptography Specification Version 2.2
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 November 2025.
+   This Internet-Draft will expire on 26 November 2025.
 
 Copyright Notice
 
@@ -578,8 +578,8 @@ Table of Contents
               Technology, DOI 10.6028/nist.sp.800-63b, June 2017,
               <https://doi.org/10.6028/nist.sp.800-63b>.
 
-   [YESCRYPT] Peslyak (S Designer), A., "openwall yescrypt - scalable
-              KDF and password hashing scheme", 2018,
+   [YESCRYPT] Peslyak (Solar Designer), A., "openwall yescrypt -
+              scalable KDF and password hashing scheme", 2018,
               <https://www.openwall.com/yescrypt/>.
 
 Acknowledgments
